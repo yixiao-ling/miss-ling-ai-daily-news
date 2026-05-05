@@ -69,7 +69,6 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
             messages=[{"role": "user", "content": _build_user_prompt(item)}],
         )
         raw_text = response.content[0].text.strip()
-        # strip markdown fences if model adds them despite instructions
         if raw_text.startswith("```"):
             raw_text = raw_text.split("```")[1]
             if raw_text.startswith("json"):
@@ -78,7 +77,6 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
         try:
             data = json.loads(raw_text)
         except json.JSONDecodeError:
-            # extract outermost {...} block and retry
             m = re.search(r'\{.*\}', raw_text, re.DOTALL)
             if m:
                 data = json.loads(m.group())
@@ -110,11 +108,7 @@ def summarize_all(items: list[RawItem]) -> list[DigestedItem]:
     for i, item in enumerate(items, 1):
         print(f"[Summarize] {i}/{n} @{item.source_label}")
         digested = summarize_item(item, client)
-        if not digested.summary_zh or digested.summary_zh == (item.summary[:150] if item.summary else item.title):
-            # heuristic: if summary_zh looks like raw fallback, count it
-            pass
         results.append(digested)
-        # count fallbacks: eli5 empty indicates fallback path
         if digested.eli5 == "" and digested.tags == [] and digested.use_cases == []:
             fallback_count += 1
         if i < n:
