@@ -18,6 +18,7 @@ from .fetch_sources import (
     fetch_x_kol,
     fetch_rss_sources,
 )
+from .filter import run_filter
 from .schema import RawItem
 
 _ALL_FETCHERS = {
@@ -47,8 +48,10 @@ def run(sources: list[str], dry_run: bool) -> list[RawItem]:
     print(parts + f" | Total: {len(all_items)}")
 
     if dry_run:
-        print("[dry-run] Claude summarization will be skipped (Module 3).")
+        print("[dry-run] filter + Claude summarization skipped (Modules 2 & 3).")
+        return all_items
 
+    all_items = run_filter(all_items)
     return all_items
 
 
