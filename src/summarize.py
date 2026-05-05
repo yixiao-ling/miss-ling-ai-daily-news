@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 import os
 import time
 
@@ -19,46 +18,65 @@ _VALID_CATEGORIES = {"模型能力", "AI产品", "商业动态", "开源生态",
 _SYSTEM_PROMPT = """\
 你是一位服务于 AI 产品经理的资讯编辑。AI 产品经理的特点：懂技术原理、关注产品落地、重视商业价值、需要快速判断信息优先级。
 
-你的任务是分析每条资讯，输出以下 JSON 格式（不要输出任何 JSON 以外的内容，不要加 markdown 代码块）：
-{
-  "title_zh": "如果原标题不是简体中文，翻译成简体中文并保留关键英文术语；如果已是中文，原样输出",
-  "summary_zh": "50-100字中文高度概括。必须用简体中文写，即使原文是英文也要翻译总结。不要逐句翻译原文，而是提炼出这条资讯最核心的一个结论或事实。格式：先说发生了什么（who did what），再说为什么重要（why it matters）",
-  "so_what": "100-150字影响分析。新技术→大白话解释原理+产品场景；新产品→解决什么痛点+竞品对比；商业动态→对行业格局的影响。站在AI产品经理视角，这条信息意味着什么",
-  "eli5": "2-3句极简大白话，面向完全不懂技术的人",
-  "use_cases": ["具体应用场景1，一句话", "具体应用场景2，一句话"],
-  "tags": ["标签1", "标签2", "标签3"],
-  "category": "从以下六个中选一个：模型能力 / AI产品 / 商业动态 / 开源生态 / 行业落地 / 其他",
-  "importance": 3
+请调用 save_digest 工具输出分析结果，各字段说明：
+- title_zh：如果原标题不是简体中文，翻译成简体中文并保留关键英文术语；如果已是中文，原样输出
+- summary_zh：50-100字中文高度概括。必须用简体中文写，即使原文是英文也要翻译总结。不要逐句翻译原文，而是提炼出这条资讯最核心的一个结论或事实。格式：先说发生了什么（who did what），再说为什么重要（why it matters）
+- so_what：100-150字影响分析。新技术→大白话解释原理+产品场景；新产品→解决什么痛点+竞品对比；商业动态→对行业格局的影响。站在AI产品经理视角，这条信息意味着什么
+- eli5：2-3句极简大白话，面向完全不懂技术的人
+- use_cases：2-4条具体应用场景，每条一句话
+- tags：2-4个关键词标签
+- category：从六个分类中选一个
+- importance 评分标准（面向 AI 产品经理视角打分）：
+  5分 = 必看：直接影响产品决策（重大模型发布、核心API变更、行业巨头战略转向、法规政策变化）
+  4分 = 重要：值得深入了解（有潜力的新工具、重要竞品动态、值得跟进的技术趋势）
+  3分 = 参考：有价值但不紧急（一般性产品更新、社区讨论热点）
+  2分 = 了解：背景信息，扫一眼即可
+  1分 = 低优：边缘内容，与产品决策关联弱"""
+
+_DIGEST_TOOL = {
+    "name": "save_digest",
+    "description": "保存这条资讯的中文摘要分析结果",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "title_zh": {"type": "string", "description": "简体中文标题"},
+            "summary_zh": {"type": "string", "description": "50-100字中文高度概括"},
+            "so_what": {"type": "string", "description": "100-150字影响分析"},
+            "eli5": {"type": "string", "description": "2-3句大白话"},
+            "use_cases": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "2-4条具体应用场景",
+            },
+            "tags": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "2-4个关键词标签",
+            },
+            "category": {
+                "type": "string",
+                "enum": ["模型能力", "AI产品", "商业动态", "开源生态", "行业落地", "其他"],
+            },
+            "importance": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5,
+            },
+        },
+        "required": [
+            "title_zh", "summary_zh", "so_what", "eli5",
+            "use_cases", "tags", "category", "importance",
+        ],
+    },
 }
-importance 评分标准（面向 AI 产品经理视角打分）：
-5分 = 必看：直接影响产品决策（重大模型发布、核心API变更、行业巨头战略转向、法规政策变化）
-4分 = 重要：值得深入了解（有潜力的新工具、重要竞品动态、值得跟进的技术趋势）
-3分 = 参考：有价值但不紧急（一般性产品更新、社区讨论热点）
-2分 = 了解：背景信息，扫一眼即可
-1分 = 低优：边缘内容，与产品决策关联弱"""
-
-
-def _extract_json(text: str) -> str:
-    text = text.strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[-1]
-    if text.endswith("```"):
-        text = text.rsplit("```", 1)[0]
-    text = text.strip()
-    start = text.find("{")
-    end = text.rfind("}")
-    if start != -1 and end != -1 and end > start:
-        return text[start:end + 1]
-    return text
 
 
 def _build_user_prompt(item: RawItem) -> str:
     return (
-        f"请分析以下资讯并按格式输出：\n"
+        f"请分析以下资讯：\n"
         f"来源：{item.source_label}\n"
         f"标题：{item.title}\n"
-        f"内容：{item.summary[:400]}\n"
-        f"注意：summary_zh 必须是简体中文，是高度提炼的摘要而非翻译。"
+        f"内容：{item.summary[:400]}"
     )
 
 
@@ -89,10 +107,12 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
                     "cache_control": {"type": "ephemeral"},
                 }
             ],
+            tools=[_DIGEST_TOOL],
+            tool_choice={"type": "tool", "name": "save_digest"},
             messages=[{"role": "user", "content": _build_user_prompt(item)}],
         )
-        raw_text = _extract_json(response.content[0].text)
-        data = json.loads(raw_text)
+        tool_block = next(b for b in response.content if b.type == "tool_use")
+        data = tool_block.input
         raw_category = str(data.get("category", "其他"))
         category = raw_category if raw_category in _VALID_CATEGORIES else "其他"
         title_zh = str(data.get("title_zh", "")) or item.title
