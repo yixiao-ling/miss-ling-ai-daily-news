@@ -19,8 +19,20 @@ from .fetch_sources import (
     fetch_rss_sources,
 )
 from .filter import run_filter
+from .render import render
 from .schema import DigestedItem, RawItem
 from .summarize import summarize_all
+
+def _raw_to_fallback(item: RawItem) -> DigestedItem:
+    return DigestedItem(
+        raw=item,
+        summary_zh=item.summary[:150] if item.summary else item.title,
+        eli5="",
+        use_cases=[],
+        tags=[],
+        importance=3,
+    )
+
 
 _ALL_FETCHERS = {
     "hn":          ("Hacker News",   fetch_hackernews),
@@ -50,10 +62,16 @@ def run(sources: list[str], dry_run: bool) -> list[RawItem] | list[DigestedItem]
 
     if dry_run:
         print("[dry-run] filter + Claude summarization skipped (Modules 2 & 3).")
-        return all_items
+        digested = [_raw_to_fallback(it) for it in all_items]
+        path = render(digested)
+        print(f"[dry-run] rendered → {path}")
+        return digested
 
     all_items = run_filter(all_items)
-    return summarize_all(all_items)
+    digested = summarize_all(all_items)
+    path = render(digested)
+    print(f"[Render] → {path}")
+    return digested
 
 
 def main() -> None:
