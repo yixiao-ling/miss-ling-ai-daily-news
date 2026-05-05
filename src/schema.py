@@ -21,8 +21,11 @@ class RawItem:
 @dataclass
 class DigestedItem:
     raw: RawItem
-    summary_zh: str          # Claude-generated, 50-100 字
-    eli5: str                # 大白话, 2-3 句
-    use_cases: list          # 应用场景, 2-4 条
-    tags: list               # 关键词标签, 2-4 个
-    importance: int          # 1-5
+    summary_zh: str = ""
+    eli5: str = ""
+    use_cases: list = field(default_factory=list)
+    tags: list = field(default_factory=list)
+    importance: int = 3
+    title_zh: str = ""      # 中文标题；原文非中文时翻译，中文则原样输出
+    category: str = "其他"  # 模型能力 / AI产品 / 商业动态 / 开源生态 / 行业落地 / 其他
+    so_what: str = ""       # 影响分析 100-150 字，面向 AI 产品经理
