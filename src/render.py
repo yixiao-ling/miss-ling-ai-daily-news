@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from collections import Counter
 from datetime import datetime
 from pathlib import Path
@@ -11,16 +10,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .schema import DigestedItem
 
-_SOURCE_ORDER = ["hn", "github", "ph", "x", "36kr", "huxiu", "aibase"]
-_SOURCE_LABELS = {
-    "hn":     "Hacker News",
-    "github": "GitHub",
-    "ph":     "Product Hunt",
-    "x":      "X KOL",
-    "36kr":   "36氪",
-    "huxiu":  "虎嗅",
-    "aibase": "AIbase",
-}
+_CATEGORY_ORDER = ["模型能力", "AI产品", "商业动态", "开源生态", "行业落地", "其他"]
 
 
 def _format_time(value: str) -> str:
@@ -45,24 +35,17 @@ def render(items: list[DigestedItem], output_dir: str = "docs") -> str:
     date = now.strftime("%Y-%m-%d")
     generated_at = now.strftime("%Y-%m-%d %H:%M")
 
-    source_counts: dict[str, int] = dict(Counter(it.raw.source_label for it in items))
-
-    # Build ordered filter pills: (source_key, source_label, count)
-    source_key_counts: dict[str, int] = Counter(it.raw.source for it in items)
-    source_pills = []
-    for key in _SOURCE_ORDER:
-        if key in source_key_counts:
-            source_pills.append((key, _SOURCE_LABELS.get(key, key), source_key_counts[key]))
-    # append any sources not in our fixed order
-    for key, count in source_key_counts.items():
-        if key not in _SOURCE_ORDER:
-            source_pills.append((key, key, count))
+    cat_counts: dict[str, int] = Counter(
+        getattr(it, "category", "其他") or "其他" for it in items
+    )
+    category_pills = [
+        (cat, cat_counts[cat]) for cat in _CATEGORY_ORDER if cat in cat_counts
+    ]
 
     html = env.get_template("daily.html").render(
         date=date,
         items=items,
-        source_counts=source_counts,
-        source_pills=source_pills,
+        category_pills=category_pills,
         generated_at=generated_at,
     )
 
