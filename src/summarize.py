@@ -12,25 +12,31 @@ import anthropic
 from .schema import DigestedItem, RawItem
 
 _MODEL = "claude-sonnet-4-6"
-_MAX_TOKENS = 600
+_MAX_TOKENS = 800
 _SLEEP = 0.5
 
+_VALID_CATEGORIES = {"模型能力", "AI产品", "商业动态", "开源生态", "行业落地", "其他"}
+
 _SYSTEM_PROMPT = """\
-你是一位 AI 行业资讯编辑，专为技术从业者提炼每日资讯。
+你是一位服务于 AI 产品经理的资讯编辑。AI 产品经理的特点：懂技术原理、关注产品落地、重视商业价值、需要快速判断信息优先级。
+
 你的任务是分析每条资讯，输出以下 JSON 格式（不要输出任何 JSON 以外的内容，不要加 markdown 代码块）：
 {
-  "summary_zh": "50-100字中文核心要点，说清楚这条资讯做了什么/发生了什么",
-  "eli5": "用2-3句大白话解释这个技术，像跟非技术朋友聊天一样，不用术语",
-  "use_cases": ["应用场景1，一句话", "应用场景2，一句话"],
+  "title_zh": "如果原标题不是简体中文，翻译成简体中文并保留关键英文术语；如果已是中文，原样输出",
+  "summary_zh": "50-100字中文摘要，说清楚核心事实",
+  "so_what": "100-150字影响分析。新技术→大白话解释原理+产品场景；新产品→解决什么痛点+竞品对比；商业动态→对行业格局的影响。站在AI产品经理视角，这条信息意味着什么",
+  "eli5": "2-3句极简大白话，面向完全不懂技术的人",
+  "use_cases": ["具体应用场景1，一句话", "具体应用场景2，一句话"],
   "tags": ["标签1", "标签2", "标签3"],
+  "category": "从以下六个中选一个：模型能力 / AI产品 / 商业动态 / 开源生态 / 行业落地 / 其他",
   "importance": 3
 }
-importance 评分标准：
-5分=行业重大突破（新模型发布/重要研究/巨头战略变化）
-4分=值得关注的进展
-3分=有参考价值的资讯
-2分=一般性信息
-1分=边缘内容"""
+importance 评分标准（面向 AI 产品经理视角打分）：
+5分 = 必看：直接影响产品决策（重大模型发布、核心API变更、行业巨头战略转向、法规政策变化）
+4分 = 重要：值得深入了解（有潜力的新工具、重要竞品动态、值得跟进的技术趋势）
+3分 = 参考：有价值但不紧急（一般性产品更新、社区讨论热点）
+2分 = 了解：背景信息，扫一眼即可
+1分 = 低优：边缘内容，与产品决策关联弱"""
 
 
 def _build_user_prompt(item: RawItem) -> str:
@@ -51,6 +57,9 @@ def _fallback(item: RawItem) -> DigestedItem:
         use_cases=[],
         tags=[],
         importance=3,
+        title_zh=item.title,
+        category="其他",
+        so_what="",
     )
 
 
@@ -82,6 +91,9 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
                 data = json.loads(m.group())
             else:
                 raise
+        raw_category = str(data.get("category", "其他"))
+        category = raw_category if raw_category in _VALID_CATEGORIES else "其他"
+        title_zh = str(data.get("title_zh", "")) or item.title
         return DigestedItem(
             raw=item,
             summary_zh=str(data.get("summary_zh", item.title)),
@@ -89,6 +101,9 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
             use_cases=list(data["use_cases"]) if isinstance(data.get("use_cases"), list) else [],
             tags=list(data["tags"]) if isinstance(data.get("tags"), list) else [],
             importance=int(data.get("importance", 3)),
+            title_zh=title_zh,
+            category=category,
+            so_what=str(data.get("so_what", "")),
         )
     except Exception as exc:
         print(f"[WARN] summarize failed for '{item.title[:40]}': {exc}")
