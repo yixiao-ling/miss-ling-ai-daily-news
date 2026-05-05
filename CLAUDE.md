@@ -12,24 +12,29 @@
 - 部署：GitHub Pages（docs/ 目录）
 
 ## 目录结构
-miss-ling-ai-daily/
+ai-news/
 ├── src/
-│   ├── fetch_sources.py     # 各数据源采集模块
-│   ├── filter.py            # 本地关键词过滤 & 去重
-│   ├── summarize.py         # Claude AI 摘要生成
-│   ├── render.py            # HTML 页面生成
-│   └── main.py              # 入口，串联所有模块
+│   ├── __init__.py
+│   ├── schema.py            # RawItem / DigestedItem dataclass 定义
+│   ├── fetch_sources.py     # 5个数据源采集：HN / PH / GitHub / X / RSS
+│   ├── filter.py            # Module 2 占位：关键词过滤 & URL去重 & 截量
+│   ├── summarize.py         # Module 3 占位：Claude AI 摘要生成
+│   ├── render.py            # Module 5 占位：Jinja2 → HTML 输出
+│   └── main.py              # 入口：--dry-run / --source 参数，串联所有模块
 ├── templates/
-│   └── daily.html           # Jinja2 HTML 模板
+│   └── daily.html           # Module 4 占位：Jinja2 HTML 模板
 ├── data/
-│   └── x_kol.json           # 手动维护的 KOL 推文 JSON
+│   └── x_kol.json           # KOL 推文数据（10人/24条，likes>=30过滤后19条）
 ├── docs/
-│   ├── index.html           # 最新一期（GitHub Pages 入口）
-│   └── archive/             # 历史存档 YYYY-MM-DD.html
+│   ├── .gitkeep
+│   └── archive/
+│       └── .gitkeep         # 历史存档目录，存放 YYYY-MM-DD.html
 ├── .github/workflows/
-│   └── daily.yml            # GitHub Actions 定时任务
-├── requirements.txt
-└── README.md
+│   └── daily.yml            # Module 7 占位：GitHub Actions cron 定时任务
+├── .gitignore
+├── requirements.txt         # anthropic, feedparser, requests, bs4, jinja2
+├── README.md
+└── CLAUDE.md
 
 ## 关键规则
 - 称呼 Yixiao（每次回复前必须使用「Yixiao」作为称呼）
