@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miss Ling AI 日报 · 2026-05-05</title>
+<style>
+:root {
+  --bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --text: #202124;
+  --text-secondary: #5f6368;
+  --border: #e8eaed;
+  --tag-bg: #e8eaed;
+  --primary: #1a73e8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  --pill-active-bg: #1a73e8;
+  --pill-active-color: #fff;
+  --pill-bg: #e8eaed;
+  --pill-color: #3c4043;
+  --star-color: #fbbc04;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1a1a;
+    --card-bg: #2d2d2d;
+    --text: #e8eaed;
+    --text-secondary: #9aa0a6;
+    --border: #3c4043;
+    --tag-bg: #3c4043;
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    --pill-bg: #3c4043;
+    --pill-color: #e8eaed;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.container { max-width: 800px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.header {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0 20px;
+  margin-bottom: 16px;
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.header .meta {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.header .meta span { margin-right: 12px; }
+
+/* Filter pills */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--pill-bg);
+  color: var(--pill-color);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+}
+.pill:hover { opacity: 0.85; }
+.pill.active {
+  background: var(--pill-active-bg);
+  color: var(--pill-active-color);
+}
+.pill .count {
+  margin-left: 5px;
+  opacity: 0.7;
+  font-size: 11px;
+}
+
+/* Cards */
+.card-list { }
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.badge-hn      { background: #ff6600; }
+.badge-github  { background: #24292e; }
+.badge-ph      { background: #da552f; }
+.badge-x       { background: #000000; }
+.badge-36kr    { background: #e60012; }
+.badge-huxiu   { background: #e65c00; }
+.badge-aibase  { background: #4285f4; }
+.badge-default { background: #5f6368; }
+
+.stars { color: var(--star-color); font-size: 12px; letter-spacing: 1px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-left: auto; }
+.tag {
+  background: var(--tag-bg);
+  color: var(--text-secondary);
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+.card-title a {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.4;
+}
+.card-title a:hover { color: var(--primary); }
+
+.card-summary {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.card-time { color: var(--text-secondary); font-size: 12px; }
+
+.toggle-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s;
+}
+.toggle-btn:hover { background: var(--tag-bg); }
+.toggle-btn .arrow { transition: transform 0.2s; font-style: normal; font-size: 10px; }
+.toggle-btn.open .arrow { transform: rotate(180deg); }
+
+.details {
+  display: none;
+  margin-top: 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.65;
+  border: 1px solid var(--border);
+}
+.details.visible { display: block; }
+.details .eli5 { margin-bottom: 8px; }
+.details .eli5-label { font-weight: 600; color: var(--text); }
+.details .usecases-label { font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.details ul { list-style: none; padding: 0; }
+.details ul li::before { content: "• "; color: var(--primary); }
+.details ul li { color: var(--text-secondary); margin-bottom: 2px; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 28px 0 32px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+.footer strong { color: var(--text); }
+
+/* hidden card */
+.card.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <h1>Miss Ling AI 日报</h1>
+    <div class="meta">
+      <span>📅 2026-05-05</span>
+      <span>📦 今日精选 31 条</span>
+      
+      <span>Hacker News 3</span>
+      
+      <span>Product Hunt 10</span>
+      
+      <span>GitHub Trending 10</span>
+      
+      <span>X @sama 1</span>
+      
+      <span>36氪 2</span>
+      
+      <span>X @levie 2</span>
+      
+      <span>X @garrytan 1</span>
+      
+      <span>X @petergyang 1</span>
+      
+      <span>X @zarazhangrui 1</span>
+      
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="filter-bar" id="filterBar">
+    <button class="pill active" data-filter="all">全部 <span class="count">31</span></button>
+    
+    <button class="pill" data-filter="hn">Hacker News <span class="count">3</span></button>
+    
+    <button class="pill" data-filter="github">GitHub <span class="count">10</span></button>
+    
+    <button class="pill" data-filter="x">X KOL <span class="count">6</span></button>
+    
+    <button class="pill" data-filter="36kr">36氪 <span class="count">2</span></button>
+    
+    <button class="pill" data-filter="producthunt">producthunt <span class="count">10</span></button>
+    
+  </div>
+
+  <div class="card-list" id="cardList">
+    
+    <article class="card" data-source="hn">
+      <div class="card-header">
+        <span class="badge badge-hn">Hacker News</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/" target="_blank" rel="noopener noreferrer">How OpenAI delivers low-latency voice AI at scale</a>
+      </div>
+
+      <div class="card-summary">How OpenAI delivers low-latency voice AI at scale</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 19:42</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/kilocode" target="_blank" rel="noopener noreferrer">Kilo Code for VS Code 7</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Parallel agents, diff reviewer, and multi-model comparisons
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.</div>
+
+      <div class="card-footer">
+        <span class="card-time">03-30 01:59</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener noreferrer">msitarzewski/agency-agents</a>
+      </div>
+
+      <div class="card-summary">A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @sama</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/sama/status/2050998576671859003" target="_blank" rel="noopener noreferrer">@sama: Agents SDK 2.0 is underrated</a>
+      </div>
+
+      <div class="card-summary">Agents SDK 2.0 is underrated</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-03 17:59</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="36kr">
+      <div class="card-header">
+        <span class="badge badge-36kr">36氪</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/p/3789475357400068?f=rss" target="_blank" rel="noopener noreferrer">卓驭于贝贝：向物理AI转型，是生存法则的必然选择 | 最前线</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;文｜肖漫&lt;/p&gt;
+  &lt;p&gt;编辑｜李勤&lt;/p&gt;
+  &lt;p&gt;当下的智能汽车领域，物理 AI 已成为高频词汇，绝大多数智能驾驶算法厂商都在往“物理AI”转型。&lt;/p&gt;
+  &lt;p&gt;卓驭在北京车展上也发布了面向移动物理 AI 的原生多模态基础模型。在卓驭科技副总裁于贝贝看来，算法厂商向物理AI转型不是</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-02 21:17</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="hn">
+      <div class="card-header">
+        <span class="badge badge-hn">Hacker News</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.404media.co/literacy-in-future-technologies-artificial-intelligence-act-adam-schiff-mike-rounds/" target="_blank" rel="noopener noreferrer">OpenAI, Google, and Microsoft Back Bill to Fund &#39;AI Literacy&#39; in Schools</a>
+      </div>
+
+      <div class="card-summary">OpenAI, Google, and Microsoft Back Bill to Fund &#39;AI Literacy&#39; in Schools</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 16:21</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/saastr-ai-your-ai-powered-b2b-advisor" target="_blank" rel="noopener noreferrer">Agentic API Grader by SaaStr.ai</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Your #1 new customer is an AI agent. Are they getting an A?
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 04:30</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/TauricResearch/TradingAgents" target="_blank" rel="noopener noreferrer">TauricResearch/TradingAgents</a>
+      </div>
+
+      <div class="card-summary">TradingAgents: Multi-Agents LLM Financial Trading Framework</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @levie</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/levie/status/2051057677984469277" target="_blank" rel="noopener noreferrer">@levie: Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent ve…</a>
+      </div>
+
+      <div class="card-summary">Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent vendors, or new internal agent engineering roles, the amount of work tha</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-03 21:53</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="36kr">
+      <div class="card-header">
+        <span class="badge badge-36kr">36氪</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/newsflashes/3795834368302088?f=rss" target="_blank" rel="noopener noreferrer">苹果考虑让英特尔、三星代工设备处理器</a>
+      </div>
+
+      <div class="card-summary">苹果公司正与英特尔、三星电子洽谈，计划将设备主处理器交由这两家企业生产，作为台积电之外的备选供应商。目前苹果与英特尔、三星的谈判仍处于初步阶段，尚未下达任何订单。苹果对采用非台积电技术仍存顾虑。受供应链中断影响（包括近期 AI 数据中心建设热潮、Mac 需求超预期导致的芯片短缺），苹果正考虑增加供应</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 12:09</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="hn">
+      <div class="card-header">
+        <span class="badge badge-hn">Hacker News</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.nytimes.com/2026/05/04/technology/trump-ai-models.html" target="_blank" rel="noopener noreferrer">White House Considers Vetting A.I. Models Before They Are Released</a>
+      </div>
+
+      <div class="card-summary">White House Considers Vetting A.I. Models Before They Are Released</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 19:18</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/unity" target="_blank" rel="noopener noreferrer">Unity AI</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            AI agents built directly into Unity workflows
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products/u</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 21:14</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/sansan0/TrendRadar" target="_blank" rel="noopener noreferrer">sansan0/TrendRadar</a>
+      </div>
+
+      <div class="card-summary">⭐AI-driven public opinion &amp; trend monitor with multi-platform aggregation, RSS, and smart alerts.🎯 告别信息过载，你的 AI 舆情监控助手与热点筛选工具！聚合多平台热点 + RSS 订阅，支持关键词精准</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @garrytan</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/garrytan/status/2051099735176659256" target="_blank" rel="noopener noreferrer">@garrytan: The goal of Personal AI: civilization where individual humans, augmented by AI,…</a>
+      </div>
+
+      <div class="card-summary">The goal of Personal AI: civilization where individual humans, augmented by AI, can do consequential work without being captured by extractive institu</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 00:40</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/openclick" target="_blank" rel="noopener noreferrer">Openclick</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            macOS agent that turns prompts into automated clicks
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 13:45</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/ruvnet/ruflo" target="_blank" rel="noopener noreferrer">ruvnet/ruflo</a>
+      </div>
+
+      <div class="card-summary">🌊 The leading agent orchestration platform for Claude. Deploy intelligent multi-agent swarms, coordinate autonomous workflows, and build conversationa</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @petergyang</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/petergyang/status/2050963126234034387" target="_blank" rel="noopener noreferrer">@petergyang: How to keep your agents running even when your macbook lid is closed:
+
+1. Go to…</a>
+      </div>
+
+      <div class="card-summary">How to keep your agents running even when your macbook lid is closed:
+
+1. Go to Mac App Store and download Amphetamine
+
+2. Go to Settings → Session De</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-03 15:38</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/flowstep" target="_blank" rel="noopener noreferrer">Flowstep 1.0</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            AI design engineer. Design &amp; ship real UI.
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products/flow</div>
+
+      <div class="card-footer">
+        <span class="card-time">04-27 10:13</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/virattt/dexter" target="_blank" rel="noopener noreferrer">virattt/dexter</a>
+      </div>
+
+      <div class="card-summary">An autonomous agent for deep financial research</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @levie</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/levie/status/2051009208393589096" target="_blank" rel="noopener noreferrer">@levie: In general, we should treat AI like a utility, not like a being. The more we con…</a>
+      </div>
+
+      <div class="card-summary">In general, we should treat AI like a utility, not like a being. The more we confuse what AI is the more we will make ourselves go crazy with analogie</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-03 18:41</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/intuned" target="_blank" rel="noopener noreferrer">Intuned Agent</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Production browser automation, built and maintained by AI
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.co</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-01 10:11</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/czlonkowski/n8n-mcp" target="_blank" rel="noopener noreferrer">czlonkowski/n8n-mcp</a>
+      </div>
+
+      <div class="card-summary">A MCP for Claude Desktop / Claude Code / Windsurf / Cursor to build n8n workflows for you</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="x">
+      <div class="card-header">
+        <span class="badge badge-x">X @zarazhangrui</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/zarazhangrui/status/2051155065331941873" target="_blank" rel="noopener noreferrer">@zarazhangrui: Before AI, you couldn&#39;t afford to build something small. Because the cost of sof…</a>
+      </div>
+
+      <div class="card-summary">Before AI, you couldn&#39;t afford to build something small. Because the cost of software development was so high, you had to hire a team, convince other </div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 04:20</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/blaze-your-new-calendar" target="_blank" rel="noopener noreferrer">Blaze</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            The AI-powered calendar that plans your day for you.
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+
+      <div class="card-footer">
+        <span class="card-time">04-29 07:37</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/AIDC-AI/Pixelle-Video" target="_blank" rel="noopener noreferrer">AIDC-AI/Pixelle-Video</a>
+      </div>
+
+      <div class="card-summary">🚀 AI 全自动短视频引擎 | AI Fully Automated Short Video Engine</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/tollecode" target="_blank" rel="noopener noreferrer">Tollecode</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            A local AI coding assistant to delegate tasks to AI agents
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.c</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 05:39</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/cocoindex-io/cocoindex" target="_blank" rel="noopener noreferrer">cocoindex-io/cocoindex</a>
+      </div>
+
+      <div class="card-summary">Incremental engine for long horizon agents 🌟 Star if you like it!</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/airbyte-agents" target="_blank" rel="noopener noreferrer">Airbyte Agents</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            The context layer for production-grade AI agent
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-04 08:40</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/MervinPraison/PraisonAI" target="_blank" rel="noopener noreferrer">MervinPraison/PraisonAI</a>
+      </div>
+
+      <div class="card-summary">PraisonAI 🦞 — Hire a 24/7 AI Workforce. Stop writing boilerplate and start shipping autonomous self-improving agents that research, plan, code, and ex</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="producthunt">
+      <div class="card-header">
+        <span class="badge badge-producthunt">Product Hunt</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/arcana-labs" target="_blank" rel="noopener noreferrer">Arcana Labs</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            AI studio for image and video creation
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products/arcana-l</div>
+
+      <div class="card-footer">
+        <span class="card-time">04-30 14:28</span>
+        
+      </div>
+
+      
+    </article>
+    
+    <article class="card" data-source="github">
+      <div class="card-header">
+        <span class="badge badge-github">GitHub Trending</span>
+        <span class="stars">★★★</span>
+        <div class="tags">
+          
+        </div>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/Lightricks/LTX-2" target="_blank" rel="noopener noreferrer">Lightricks/LTX-2</a>
+      </div>
+
+      <div class="card-summary">Official Python inference and LoRA trainer package for the LTX-2 audio–video generative model.</div>
+
+      <div class="card-footer">
+        <span class="card-time">05-05 00:00</span>
+        
+      </div>
+
+      
+    </article>
+    
+  </div>
+
+  <div class="footer">
+    <strong>Miss Ling AI 日报</strong> · 生成时间：2026-05-05 07:53 · 由 Claude AI 驱动
+  </div>
+
+</div>
+
+<script>
+function toggleDetails(btn) {
+  var card = btn.closest('.card');
+  var details = card.querySelector('.details');
+  var open = details.classList.toggle('visible');
+  btn.classList.toggle('open', open);
+}
+
+var filterBar = document.getElementById('filterBar');
+var cards = document.querySelectorAll('.card');
+
+filterBar.addEventListener('click', function(e) {
+  var pill = e.target.closest('.pill');
+  if (!pill) return;
+  filterBar.querySelectorAll('.pill').forEach(function(p) { p.classList.remove('active'); });
+  pill.classList.add('active');
+  var filter = pill.dataset.filter;
+  cards.forEach(function(card) {
+    if (filter === 'all' || card.dataset.source === filter) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+});
+</script>
+</body>
+</html>
