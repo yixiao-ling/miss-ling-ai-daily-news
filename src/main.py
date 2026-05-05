@@ -19,7 +19,8 @@ from .fetch_sources import (
     fetch_rss_sources,
 )
 from .filter import run_filter
-from .schema import RawItem
+from .schema import DigestedItem, RawItem
+from .summarize import summarize_all
 
 _ALL_FETCHERS = {
     "hn":          ("Hacker News",   fetch_hackernews),
@@ -30,7 +31,7 @@ _ALL_FETCHERS = {
 }
 
 
-def run(sources: list[str], dry_run: bool) -> list[RawItem]:
+def run(sources: list[str], dry_run: bool) -> list[RawItem] | list[DigestedItem]:
     all_items: list[RawItem] = []
     counts: dict[str, int] = {}
 
@@ -52,7 +53,7 @@ def run(sources: list[str], dry_run: bool) -> list[RawItem]:
         return all_items
 
     all_items = run_filter(all_items)
-    return all_items
+    return summarize_all(all_items)
 
 
 def main() -> None:
