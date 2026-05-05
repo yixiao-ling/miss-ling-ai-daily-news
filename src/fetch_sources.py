@@ -141,6 +141,45 @@ def fetch_producthunt() -> list[RawItem]:
 
 
 # ---------------------------------------------------------------------------
+# X KOL tweets (local JSON file)
+# ---------------------------------------------------------------------------
+
+def fetch_x_kol(json_path: str = "data/x_kol.json") -> list[RawItem]:
+    """Read KOL tweets from local JSON, return those with likes >= 30."""
+    import json
+    import os
+
+    path = os.path.join(os.path.dirname(os.path.dirname(__file__)), json_path)
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    items: list[RawItem] = []
+    for kol in data.get("x", []):
+        handle = kol.get("handle", "")
+        for tweet in kol.get("tweets", []):
+            likes = int(tweet.get("likes") or 0)
+            if likes < 30:
+                continue
+            text = (tweet.get("text") or "").strip()
+            url = tweet.get("url") or ""
+            if not text or not url:
+                continue
+            title = f"@{handle}: {text[:80]}"
+            if len(text) > 80:
+                title = title.rstrip() + "…"
+            items.append(RawItem(
+                source="x",
+                source_label=f"X @{handle}",
+                title=title,
+                summary=text,
+                url=url,
+                published_at=tweet.get("createdAt") or datetime.now(timezone.utc).isoformat(),
+                score=likes,
+            ))
+    return items
+
+
+# ---------------------------------------------------------------------------
 # GitHub Trending (HTML scrape — no official API)
 # ---------------------------------------------------------------------------
 
