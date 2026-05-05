@@ -6,7 +6,7 @@
 ## 技术栈
 - 语言：Python 3.11
 - 采集：requests, feedparser, PRAW（Reddit 已移除，保留接口以备扩展）
-- AI 摘要：anthropic SDK（claude-sonnet-4-20250514）
+- AI 摘要：anthropic SDK（claude-sonnet-4-6）
 - 模板渲染：Jinja2
 - 自动化：GitHub Actions（cron 每日 UTC 01:00 触发）
 - 部署：GitHub Pages（docs/ 目录）
@@ -18,7 +18,7 @@ ai-news/
 │   ├── schema.py            # RawItem / DigestedItem dataclass 定义
 │   ├── fetch_sources.py     # 5个数据源采集：HN / PH / GitHub / X / RSS
 │   ├── filter.py            # Module 2：关键词过滤 & 阈值过滤 & URL去重 & 截量
-│   ├── summarize.py         # Module 3 占位：Claude AI 摘要生成
+│   ├── summarize.py         # Module 3：Claude AI 摘要生成（prompt caching + fallback）
 │   ├── render.py            # Module 5 占位：Jinja2 → HTML 输出
 │   └── main.py              # 入口：--dry-run / --source 参数，串联所有模块
 ├── templates/
@@ -60,6 +60,12 @@ ai-news/
 - Product Hunt 使用官方 Atom feed，无需 API Key
 - HN 使用 Algolia Search API，免费无需 Key
 - Claude API 调用失败时降级展示原标题+截断摘要，不阻塞页面生成
+- summarize.py 设计决策（Module 3）：
+  - 模型：claude-sonnet-4-6（claude-sonnet-4-20250514 在当前账号 404，已弃用）
+  - system prompt 用 cache_control: ephemeral 标记，30条/批复用同一缓存，降低 token 成本
+  - 顺序处理，条目间 sleep 0.5s 避免 rate limit
+  - 降级策略：API key 缺失/JSON 解析失败/API 异常，返回 summary_zh=原文前150字，eli5/tags/use_cases 为空
+  - JSON 解析有双重兜底：先剥 markdown fence，再用 regex 提取 {...} 块
 - filter.py 设计决策（Module 2）：
   - URL 去重只剥离 utm_* 参数，fragment 保留
   - score 阈值：hn>=50，github>=20，x>=30，其余 source 为 0
