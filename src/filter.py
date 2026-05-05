@@ -15,11 +15,19 @@ _KEYWORDS_EN = (
     "autonomous", "copilot", "chatbot",
 )
 _KEYWORDS_CN = (
-    "ai", "人工智能", "大模型", "机器学习", "智能体",
+    "人工智能", "大模型", "机器学习", "智能体",
     "推理", "微调", "多模态", "扩散模型",
 )
 
-_BYPASS_KEYWORD: set[str] = {"aibase"}
+# Merged, deduplicated, split into phrase vs word for efficient matching
+_ALL_KEYWORDS: tuple[str, ...] = tuple(dict.fromkeys(_KEYWORDS_EN + _KEYWORDS_CN))
+_PHRASE_KEYWORDS: tuple[str, ...] = tuple(kw for kw in _ALL_KEYWORDS if " " in kw)
+_WORD_PATTERNS: tuple[re.Pattern, ...] = tuple(
+    re.compile(rf"\b{re.escape(kw)}(?:s|es)?\b")
+    for kw in _ALL_KEYWORDS if " " not in kw
+)
+
+_BYPASS_SOURCES: set[str] = {"aibase"}
 
 _SCORE_THRESHOLDS: dict[str, int] = {
     "hn": 50,
@@ -30,33 +38,28 @@ _SCORE_THRESHOLDS: dict[str, int] = {
 _PER_SOURCE_CAP = 10
 
 
-def _matches(text: str, keywords: tuple) -> bool:
-    """Word-boundary keyword match; strips dots, normalises separators."""
+def _matches(text: str) -> bool:
+    """Word-boundary keyword match against the unified AI keyword list."""
     t = text.lower()
     t = re.sub(r"\.", "", t)
     t = re.sub(r"[_/\-]+", " ", t)
-    for kw in keywords:
-        if " " in kw:
-            if kw in t:
-                return True
-        else:
-            if re.search(rf"\b{re.escape(kw)}(?:s|es)?\b", t):
-                return True
-    return False
+    for phrase in _PHRASE_KEYWORDS:
+        if phrase in t:
+            return True
+    return any(p.search(t) for p in _WORD_PATTERNS)
 
 
 def keyword_filter(items: list[RawItem]) -> list[RawItem]:
     """Keep items whose title+summary matches AI keywords.
 
-    Sources in _BYPASS_KEYWORD pass through unconditionally.
+    Sources in _BYPASS_SOURCES pass through unconditionally.
     """
     out = []
     for item in items:
-        if item.source in _BYPASS_KEYWORD:
+        if item.source in _BYPASS_SOURCES:
             out.append(item)
             continue
-        text = item.title + " " + item.summary
-        if _matches(text, _KEYWORDS_EN) or _matches(text, _KEYWORDS_CN):
+        if _matches(item.title + " " + item.summary):
             out.append(item)
     return out
 
