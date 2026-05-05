@@ -1,7 +1,9 @@
 # Miss Ling AI 日报
 
 ## 项目简介
-一款面向 AI 行业从业者的每日资讯聚合工具。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集内容，经本地关键词过滤、去重、Claude AI 摘要处理，生成每日精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
+一款面向 **AI 产品经理**的每日资讯聚合工具。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集内容，经本地关键词过滤、去重、Claude AI 摘要处理，生成每日精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
+
+目标受众特征：懂技术原理、关注产品落地、重视商业价值、需要快速判断信息优先级。
 
 ## 技术栈
 - 语言：Python 3.11
@@ -64,8 +66,9 @@ ai-news/
   - 模型：claude-sonnet-4-6（claude-sonnet-4-20250514 在当前账号 404，已弃用）
   - system prompt 用 cache_control: ephemeral 标记，30条/批复用同一缓存，降低 token 成本
   - 顺序处理，条目间 sleep 0.5s 避免 rate limit
-  - 降级策略：API key 缺失/JSON 解析失败/API 异常，返回 summary_zh=原文前150字，eli5/tags/use_cases 为空
+  - 降级策略：API key 缺失/JSON 解析失败/API 异常，返回 summary_zh=原文前150字，其余字段为空/默认值
   - JSON 解析有双重兜底：先剥 markdown fence，再用 regex 提取 {...} 块
+  - prompt 面向 AI 产品经理视角，输出 8 个字段（见 DigestedItem）
 - filter.py 设计决策（Module 2）：
   - URL 去重只剥离 utm_* 参数，fragment 保留
   - score 阈值：hn>=50，github>=20，x>=30，其余 source 为 0
@@ -74,7 +77,21 @@ ai-news/
   - --dry-run 跳过 filter + Claude（所有非纯采集步骤），保留原始条目用于调试采集层
 - render.py 设计决策（Module 4/5）：
   - Jinja2 autoescape=True（防 XSS），format_time 自定义过滤器（ISO→MM-DD HH:mm）
-  - source_pills 按固定顺序：hn → github → ph → x → 36kr → huxiu → aibase
+  - category_pills 按固定顺序：模型能力 → AI产品 → 商业动态 → 开源生态 → 行业落地 → 其他
+  - 筛选栏不显示「其他」分类按钮，「其他」内容仅在「全部」下可见
   - 写入 docs/index.html（覆盖）+ docs/archive/YYYY-MM-DD.html（覆盖，每日一份）
   - 空 items 时渲染"今日暂无内容"提示页，不报错退出
   - --dry-run 模式用 _raw_to_fallback() 生成 DigestedItem 占位，验证模板不崩
+
+## DigestedItem 字段说明
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| raw | RawItem | 原始采集数据 |
+| summary_zh | str | 50-100字中文摘要 |
+| eli5 | str | 2-3句大白话，面向非技术人 |
+| use_cases | list | 具体应用场景，2-4条 |
+| tags | list | 关键词标签，2-4个 |
+| importance | int | 1-5分，AI产品经理视角打分 |
+| title_zh | str | 中文标题（原文非中文时翻译，中文则原样） |
+| category | str | 分类：模型能力/AI产品/商业动态/开源生态/行业落地/其他 |
+| so_what | str | 100-150字影响分析，AI产品经理视角 |
