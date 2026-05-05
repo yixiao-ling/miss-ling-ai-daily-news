@@ -17,7 +17,7 @@ ai-news/
 │   ├── __init__.py
 │   ├── schema.py            # RawItem / DigestedItem dataclass 定义
 │   ├── fetch_sources.py     # 5个数据源采集：HN / PH / GitHub / X / RSS
-│   ├── filter.py            # Module 2 占位：关键词过滤 & URL去重 & 截量
+│   ├── filter.py            # Module 2：关键词过滤 & 阈值过滤 & URL去重 & 截量
 │   ├── summarize.py         # Module 3 占位：Claude AI 摘要生成
 │   ├── render.py            # Module 5 占位：Jinja2 → HTML 输出
 │   └── main.py              # 入口：--dry-run / --source 参数，串联所有模块
@@ -44,7 +44,7 @@ ai-news/
 - 所有 API Key 通过环境变量注入，绝不硬编码
 
 ## 构建与验证
-- 本地运行：`python src/main.py --dry-run`（不调用 Claude API，用 mock 数据验证流程）
+- 本地运行：`python src/main.py --dry-run`（跳过 filter + Claude，仅验证采集层）
 - 正式运行：`python src/main.py`
 - 验证方式：运行后打开 `docs/index.html`，检查页面是否正常渲染，卡片数据是否完整
 - GitHub Actions：push 后在 Actions tab 查看运行日志
@@ -60,3 +60,9 @@ ai-news/
 - Product Hunt 使用官方 Atom feed，无需 API Key
 - HN 使用 Algolia Search API，免费无需 Key
 - Claude API 调用失败时降级展示原标题+截断摘要，不阻塞页面生成
+- filter.py 设计决策（Module 2）：
+  - URL 去重只剥离 utm_* 参数，fragment 保留
+  - score 阈值：hn>=50，github>=20，x>=30，其余 source 为 0
+  - aibase 跳过关键词过滤（全站为 AI 内容）
+  - truncate 用 round-robin 交错（先各 source 取前 10，再轮询合并到 40），避免 RSS/PH 被 GH/X 的高 score 挤出
+  - --dry-run 跳过 filter + Claude（所有非纯采集步骤），保留原始条目用于调试采集层
