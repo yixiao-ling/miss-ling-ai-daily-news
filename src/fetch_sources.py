@@ -5,6 +5,7 @@ from __future__ import annotations
 import time
 from datetime import datetime, timezone
 
+import feedparser
 import requests
 
 from .schema import RawItem
@@ -79,5 +80,42 @@ def fetch_hackernews(since_hours: int = 26) -> list[RawItem]:
             score=int(h.get("points") or 0),
         ))
         if len(items) >= 15:
+            break
+    return items
+
+
+# ---------------------------------------------------------------------------
+# Product Hunt (Atom feed)
+# ---------------------------------------------------------------------------
+
+def fetch_producthunt() -> list[RawItem]:
+    """Latest PH launches filtered by AI / dev-tool keywords."""
+    feed = feedparser.parse(
+        "https://www.producthunt.com/feed",
+        request_headers={"User-Agent": _USER_AGENT},
+    )
+    items: list[RawItem] = []
+    for e in feed.entries:
+        title = (e.get("title") or "").strip()
+        url = (e.get("link") or "").strip()
+        summary = (e.get("summary") or "").strip()
+        if not title or not url:
+            continue
+        if not _matches(title + " " + summary, _KW_DEV):
+            continue
+
+        # Atom feeds use `published` or `updated`; both already ISO-8601 in PH
+        published = e.get("published") or e.get("updated") or datetime.now(timezone.utc).isoformat()
+
+        items.append(RawItem(
+            source="producthunt",
+            source_label="Product Hunt",
+            title=title,
+            summary=summary[:400],
+            url=url,
+            published_at=published,
+            score=0,  # PH feed exposes no vote count
+        ))
+        if len(items) >= 10:
             break
     return items
