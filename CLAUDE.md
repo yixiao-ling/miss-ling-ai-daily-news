@@ -19,10 +19,10 @@ ai-news/
 │   ├── fetch_sources.py     # 5个数据源采集：HN / PH / GitHub / X / RSS
 │   ├── filter.py            # Module 2：关键词过滤 & 阈值过滤 & URL去重 & 截量
 │   ├── summarize.py         # Module 3：Claude AI 摘要生成（prompt caching + fallback）
-│   ├── render.py            # Module 5 占位：Jinja2 → HTML 输出
+│   ├── render.py            # Module 4/5：Jinja2 → docs/index.html + docs/archive/YYYY-MM-DD.html
 │   └── main.py              # 入口：--dry-run / --source 参数，串联所有模块
 ├── templates/
-│   └── daily.html           # Module 4 占位：Jinja2 HTML 模板
+│   └── daily.html           # Module 4：Jinja2 HTML 模板（内联 CSS/JS，零外部依赖）
 ├── data/
 │   └── x_kol.json           # KOL 推文数据（10人/24条，likes>=30过滤后19条）
 ├── docs/
@@ -44,7 +44,7 @@ ai-news/
 - 所有 API Key 通过环境变量注入，绝不硬编码
 
 ## 构建与验证
-- 本地运行：`python src/main.py --dry-run`（跳过 filter + Claude，仅验证采集层）
+- 本地运行：`python src/main.py --dry-run`（跳过 filter + Claude，用原始数据渲染，验证采集层 + 模板渲染）
 - 正式运行：`python src/main.py`
 - 验证方式：运行后打开 `docs/index.html`，检查页面是否正常渲染，卡片数据是否完整
 - GitHub Actions：push 后在 Actions tab 查看运行日志
@@ -72,3 +72,9 @@ ai-news/
   - aibase 跳过关键词过滤（全站为 AI 内容）
   - truncate 用 round-robin 交错（先各 source 取前 10，再轮询合并到 40），避免 RSS/PH 被 GH/X 的高 score 挤出
   - --dry-run 跳过 filter + Claude（所有非纯采集步骤），保留原始条目用于调试采集层
+- render.py 设计决策（Module 4/5）：
+  - Jinja2 autoescape=True（防 XSS），format_time 自定义过滤器（ISO→MM-DD HH:mm）
+  - source_pills 按固定顺序：hn → github → ph → x → 36kr → huxiu → aibase
+  - 写入 docs/index.html（覆盖）+ docs/archive/YYYY-MM-DD.html（覆盖，每日一份）
+  - 空 items 时渲染"今日暂无内容"提示页，不报错退出
+  - --dry-run 模式用 _raw_to_fallback() 生成 DigestedItem 占位，验证模板不崩
