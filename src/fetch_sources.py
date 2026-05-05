@@ -246,3 +246,54 @@ def fetch_github_trending() -> list[RawItem]:
             score=stars,
         ))
     return items
+
+
+# ---------------------------------------------------------------------------
+# Chinese media RSS (36kr / 虎嗅 / AIbase)
+# ---------------------------------------------------------------------------
+
+_RSS_SOURCES = [
+    ("36kr",   "36氪",   "https://36kr.com/feed"),
+    ("huxiu",  "虎嗅",   "https://www.huxiu.com/rss/0.xml"),
+    ("aibase", "AIbase", "https://www.aibase.com/rss.xml"),
+]
+
+
+def fetch_rss_sources() -> list[RawItem]:
+    """Fetch 36kr, 虎嗅, AIbase RSS feeds; keyword-filter; max 10/source."""
+    items: list[RawItem] = []
+    for source, label, url in _RSS_SOURCES:
+        try:
+            feed = feedparser.parse(
+                url,
+                request_headers={"User-Agent": _USER_AGENT},
+            )
+            count = 0
+            for e in feed.entries:
+                title = (e.get("title") or "").strip()
+                link = (e.get("link") or "").strip()
+                summary = (e.get("summary") or e.get("description") or "").strip()
+                if not title or not link:
+                    continue
+                if not _matches(title + " " + summary, _KW_CN):
+                    continue
+                published = (
+                    e.get("published")
+                    or e.get("updated")
+                    or datetime.now(timezone.utc).isoformat()
+                )
+                items.append(RawItem(
+                    source=source,
+                    source_label=label,
+                    title=title,
+                    summary=summary[:400],
+                    url=link,
+                    published_at=published,
+                    score=0,
+                ))
+                count += 1
+                if count >= 10:
+                    break
+        except Exception as exc:
+            print(f"[rss] {label} failed: {exc}")
+    return items
