@@ -3,229 +3,242 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Miss Ling AI 日报 · 2026-05-05</title>
+<title>Miss Ling AI Daily · 2026-05-05</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0a;
-  --card-bg: #111111;
-  --card-border: rgba(255,255,255,0.06);
-  --card-border-hover: rgba(255,255,255,0.12);
-  --text: #ededed;
-  --text-secondary: #888888;
-  --text-muted: #666666;
-  --accent: #a78bfa;
-  --star-filled: #fbbf24;
-  --star-empty: #333333;
-  --expand-bg: #0d0d0d;
+  --bg: #0a0a0f;
+  --card-bg: #0e0e16;
+  --card-border: rgba(255,255,255,0.07);
+  --card-border-hover: rgba(255,255,255,0.13);
+  --text: #f0f0f4;
+  --text-secondary: #8a8a9a;
+  --text-muted: #44445a;
+  --expand-bg: #07070d;
   --expand-border: rgba(255,255,255,0.06);
-  --pill-hover-bg: #1f1f1f;
 
-  --cat-model: #a78bfa;
-  --cat-product: #22d3ee;
-  --cat-biz: #fbbf24;
-  --cat-oss: #34d399;
-  --cat-industry: #fb923c;
-  --cat-other: #9ca3af;
+  --cat-model:    #a78bfa;
+  --cat-product:  #3b82f6;
+  --cat-biz:      #8b5cf6;
+  --cat-oss:      #10b981;
+  --cat-industry: #f97316;
+  --cat-other:    #52526a;
 
-  --cat-model-bg: rgba(167,139,250,0.12);
-  --cat-product-bg: rgba(34,211,238,0.12);
-  --cat-biz-bg: rgba(251,191,36,0.12);
-  --cat-oss-bg: rgba(52,211,153,0.12);
-  --cat-industry-bg: rgba(251,146,60,0.12);
-  --cat-other-bg: rgba(156,163,175,0.12);
-
-  --cat-model-active-bg: rgba(167,139,250,0.18);
-  --cat-product-active-bg: rgba(34,211,238,0.18);
-  --cat-biz-active-bg: rgba(251,191,36,0.18);
-  --cat-oss-active-bg: rgba(52,211,153,0.18);
-  --cat-industry-active-bg: rgba(251,146,60,0.18);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #fafafa;
-    --card-bg: #ffffff;
-    --card-border: #e5e5e5;
-    --card-border-hover: #d4d4d4;
-    --text: #171717;
-    --text-secondary: #737373;
-    --text-muted: #737373;
-    --star-empty: #d4d4d4;
-    --expand-bg: #f5f5f5;
-    --expand-border: #e5e5e5;
-    --pill-hover-bg: #f0f0f0;
-  }
-  .tag { background: #f0f0f0; color: #666; }
+  --cat-model-bg:    rgba(167,139,250,0.10);
+  --cat-product-bg:  rgba(59,130,246,0.10);
+  --cat-biz-bg:      rgba(139,92,246,0.10);
+  --cat-oss-bg:      rgba(16,185,129,0.10);
+  --cat-industry-bg: rgba(249,115,22,0.10);
+  --cat-other-bg:    rgba(82,82,106,0.10);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 14px;
   line-height: 1.6;
 }
-.container { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+.container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
 
-/* Header */
+/* ── Header ── */
 .header {
-  padding: 32px 0 24px;
+  padding: 36px 0 28px;
   border-bottom: 1px solid var(--card-border);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.header-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #3b82f6;
+  box-shadow: 0 0 10px #3b82f6;
+  flex-shrink: 0;
 }
 .header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.4px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
-.header .date {
-  margin-top: 4px;
-  font-size: 14px;
+.header-meta {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13px;
   color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+.header-meta .live {
+  color: #10b981;
+  font-weight: 500;
 }
 
-/* Filter bar */
+/* ── Filter bar ── */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--card-border);
 }
 .pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  background: transparent;
-  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 12px;
   font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.14);
   cursor: pointer;
-  border: 1px solid var(--card-border);
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: all 0.15s;
   user-select: none;
 }
-.pill:hover { background: var(--pill-hover-bg); }
-.pill.active[data-filter="all"] {
-  background: var(--accent);
-  color: #fff;
-  border-color: transparent;
+.pill:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: var(--text);
+  background: rgba(255,255,255,0.04);
 }
-.pill.active[data-filter="模型能力"] {
-  background: var(--cat-model-active-bg);
-  color: var(--cat-model);
-  border-color: var(--cat-model);
-}
-.pill.active[data-filter="AI产品"] {
-  background: var(--cat-product-active-bg);
-  color: var(--cat-product);
-  border-color: var(--cat-product);
-}
-.pill.active[data-filter="商业动态"] {
-  background: var(--cat-biz-active-bg);
-  color: var(--cat-biz);
-  border-color: var(--cat-biz);
-}
-.pill.active[data-filter="开源生态"] {
-  background: var(--cat-oss-active-bg);
-  color: var(--cat-oss);
-  border-color: var(--cat-oss);
-}
-.pill.active[data-filter="行业落地"] {
-  background: var(--cat-industry-active-bg);
-  color: var(--cat-industry);
-  border-color: var(--cat-industry);
-}
+.pill.active[data-filter="all"]  { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.35); color: var(--text); }
+.pill.active[data-filter="模型能力"] { background: var(--cat-model-bg);    border-color: var(--cat-model);    color: var(--cat-model); }
+.pill.active[data-filter="AI产品"]   { background: var(--cat-product-bg);  border-color: var(--cat-product);  color: var(--cat-product); }
+.pill.active[data-filter="商业动态"] { background: var(--cat-biz-bg);      border-color: var(--cat-biz);      color: var(--cat-biz); }
+.pill.active[data-filter="开源生态"] { background: var(--cat-oss-bg);      border-color: var(--cat-oss);      color: var(--cat-oss); }
+.pill.active[data-filter="行业落地"] { background: var(--cat-industry-bg); border-color: var(--cat-industry); color: var(--cat-industry); }
+.pill-count { opacity: 0.45; margin-left: 5px; }
 
-/* Cards */
+/* ── Card ── */
 .card {
   background: var(--card-bg);
-  border-radius: 10px;
   border: 1px solid var(--card-border);
-  margin-bottom: 8px;
-  padding: 16px;
-  transition: border-color 0.15s;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  padding: 18px 20px;
+  transition: border-color 0.15s, border-left-color 0.2s;
 }
-.card:hover { border-color: var(--card-border-hover); }
+.card:hover {
+  border-color: var(--card-border-hover);
+  border-left-color: var(--card-accent, rgba(255,255,255,0.18));
+}
 .card.hidden { display: none; }
 
 .card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .card-meta-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
+/* Category pill */
 .cat-pill {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 11px;
   font-weight: 500;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
 }
-.cat-pill[data-cat="模型能力"] { color: var(--cat-model); background: var(--cat-model-bg); }
-.cat-pill[data-cat="AI产品"]   { color: var(--cat-product); background: var(--cat-product-bg); }
-.cat-pill[data-cat="商业动态"] { color: var(--cat-biz); background: var(--cat-biz-bg); }
-.cat-pill[data-cat="开源生态"] { color: var(--cat-oss); background: var(--cat-oss-bg); }
+.cat-pill[data-cat="模型能力"] { color: var(--cat-model);    background: var(--cat-model-bg); }
+.cat-pill[data-cat="AI产品"]   { color: var(--cat-product);  background: var(--cat-product-bg); }
+.cat-pill[data-cat="商业动态"] { color: var(--cat-biz);      background: var(--cat-biz-bg); }
+.cat-pill[data-cat="开源生态"] { color: var(--cat-oss);      background: var(--cat-oss-bg); }
 .cat-pill[data-cat="行业落地"] { color: var(--cat-industry); background: var(--cat-industry-bg); }
-.cat-pill[data-cat="其他"]     { color: var(--cat-other); background: var(--cat-other-bg); }
+.cat-pill[data-cat="其他"]     { color: var(--cat-other);    background: var(--cat-other-bg); }
 
-.stars {
-  font-size: 12px;
-  letter-spacing: 0px;
-  white-space: nowrap;
+/* Signal strength bars */
+.signal-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  vertical-align: middle;
 }
-.star-filled { color: var(--star-filled); }
-.star-empty  { color: var(--star-empty); }
+.signal-bars .bar {
+  display: block;
+  width: 4px;
+  border-radius: 1px;
+  background: var(--text-muted);
+}
+.signal-bars .bar.on { background: var(--bar-color, #52526a); }
+.signal-bars .bar:nth-child(1) { height: 4px; }
+.signal-bars .bar:nth-child(2) { height: 7px; }
+.signal-bars .bar:nth-child(3) { height: 10px; }
+.signal-bars .bar:nth-child(4) { height: 13px; }
+.signal-bars .bar:nth-child(5) { height: 16px; }
 
 .card-source {
-  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
   color: var(--text-muted);
+  letter-spacing: 0.02em;
 }
 
-.card-title { margin-bottom: 8px; }
+/* Title */
+.card-title { margin-bottom: 10px; }
 .card-title a {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--text);
   text-decoration: none;
   line-height: 1.4;
+  letter-spacing: -0.2px;
 }
-.card-title a:hover { color: var(--accent); }
+.card-title a:hover { color: #3b82f6; }
 
 .card-summary {
   color: var(--text-secondary);
   font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 10px;
+  line-height: 1.7;
+  margin-bottom: 14px;
 }
 
+/* Footer row */
 .card-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag {
-  display: inline-block;
-  background: rgba(255,255,255,0.06);
-  color: #aaa;
-  border-radius: 12px;
-  padding: 2px 10px;
-  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 3px;
+  padding: 2px 8px;
+  letter-spacing: 0.02em;
 }
-.card-time { font-size: 12px; color: var(--text-muted); }
+.card-time {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
 
+/* Action row */
 .card-actions {
   display: flex;
   align-items: center;
@@ -233,72 +246,85 @@ body {
   gap: 8px;
 }
 .btn-sowhat {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 12px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: 4px;
   background: transparent;
-  border: 1px solid var(--card-border);
-  color: var(--accent);
-  font-size: 12px;
+  border: 1px solid rgba(59,130,246,0.28);
+  color: #3b82f6;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
+  letter-spacing: 0.02em;
 }
-.btn-sowhat:hover { background: rgba(167,139,250,0.1); }
-.btn-sowhat .arrow {
-  font-size: 10px;
-  display: inline-block;
-  transition: transform 0.2s;
-}
+.btn-sowhat::before { content: "> "; opacity: 0.55; }
+.btn-sowhat:hover { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.55); }
+.btn-sowhat .arrow { font-size: 10px; display: inline-block; transition: transform 0.2s; }
 .btn-sowhat.open .arrow { transform: rotate(180deg); }
 
 .btn-source {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: 4px;
   background: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-muted);
-  font-size: 12px;
   text-decoration: none;
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
 }
-.btn-source:hover { background: var(--pill-hover-bg); color: var(--text); }
+.btn-source:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
 
 /* Expansion panel */
 .details {
   display: none;
-  margin-top: 12px;
+  margin-top: 14px;
   background: var(--expand-bg);
-  border-radius: 6px;
-  padding: 14px 16px;
+  border-radius: 4px;
+  padding: 16px 18px;
   font-size: 13px;
-  line-height: 1.65;
-  border-top: 1px solid var(--expand-border);
+  line-height: 1.7;
+  border: 1px solid var(--expand-border);
+  border-left: 2px solid rgba(59,130,246,0.35);
 }
 .details.visible { display: block; }
-.details-section { margin-bottom: 12px; }
+.details-section { margin-bottom: 14px; }
 .details-section:last-child { margin-bottom: 0; }
 .details-label {
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-  font-size: 13px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
 }
 .details-body { color: var(--text-secondary); }
 .details ul { list-style: none; padding: 0; }
-.details ul li { color: var(--text-secondary); margin-bottom: 3px; }
-.details ul li::before { content: "• "; color: var(--accent); }
+.details ul li {
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  padding-left: 14px;
+  position: relative;
+}
+.details ul li::before { content: "›"; position: absolute; left: 0; color: #3b82f6; }
 
 /* Footer */
 .footer {
   text-align: center;
   padding: 40px 0 32px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   border-top: 1px solid var(--card-border);
   margin-top: 32px;
 }
@@ -308,223 +334,39 @@ body {
 
 <div class="header">
   <div class="container">
-    <h1>Miss Ling AI 日报</h1>
-    <div class="date">2026-05-05</div>
+    <div class="header-title">
+      <div class="header-dot"></div>
+      <h1>Miss Ling AI Daily</h1>
+    </div>
+    <div class="header-meta">
+      // 2026-05-05 &nbsp;·&nbsp; 49 items &nbsp;·&nbsp; <span class="live">LIVE</span>
+    </div>
   </div>
 </div>
 
 <div class="container">
 
   <div class="filter-bar" id="filterBar">
-    <button class="pill active" data-filter="all">全部</button>
+    <button class="pill active" data-filter="all">ALL</button>
     
     
     
   </div>
+
+  
 
   <div class="card-list" id="cardList">
     
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">Hacker News</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/" target="_blank" rel="noopener noreferrer">How OpenAI delivers low-latency voice AI at scale</a>
-      </div>
-
-      <div class="card-summary">How OpenAI delivers low-latency voice AI at scale</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-04 19:42</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">Product Hunt</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://www.producthunt.com/products/intuned" target="_blank" rel="noopener noreferrer">Intuned Agent</a>
-      </div>
-
-      <div class="card-summary">&lt;p&gt;
-            Production browser automation, built and maintained by AI
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.co</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-01 10:11</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://www.producthunt.com/products/intuned" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">GitHub Trending</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer">affaan-m/everything-claude-code</a>
-      </div>
-
-      <div class="card-summary">The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencod</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-05 00:00</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">X @sama</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://x.com/sama/status/2050998576671859003" target="_blank" rel="noopener noreferrer">@sama: Agents SDK 2.0 is underrated</a>
-      </div>
-
-      <div class="card-summary">Agents SDK 2.0 is underrated</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-03 17:59</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://x.com/sama/status/2050998576671859003" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">36氪</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://36kr.com/p/3789475357400068?f=rss" target="_blank" rel="noopener noreferrer">卓驭于贝贝：向物理AI转型，是生存法则的必然选择 | 最前线</a>
-      </div>
-
-      <div class="card-summary">&lt;p&gt;文｜肖漫&lt;/p&gt;
-  &lt;p&gt;编辑｜李勤&lt;/p&gt;
-  &lt;p&gt;当下的智能汽车领域，物理 AI 已成为高频词汇，绝大多数智能驾驶算法厂商都在往“物理AI”转型。&lt;/p&gt;
-  &lt;p&gt;卓驭在北京车展上也发布了面向移动物理 AI 的原生多模态基础模型。在卓驭科技副总裁于贝贝看来，算法厂商向物理AI转型不是</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-02 21:17</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://36kr.com/p/3789475357400068?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">Hacker News</span>
       </div>
@@ -556,38 +398,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">Hacker News</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/flowstep" target="_blank" rel="noopener noreferrer">Flowstep 1.0</a>
+        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/" target="_blank" rel="noopener noreferrer">How OpenAI delivers low-latency voice AI at scale</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            AI design engineer. Design &amp; ship real UI.
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.com/products/flow</div>
+      <div class="card-summary">How OpenAI delivers low-latency voice AI at scale</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">04-27 10:13</span>
+        <span class="card-time">05-04 19:42</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/flowstep" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale/" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -597,123 +436,13 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">GitHub Trending</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://github.com/forrestchang/andrej-karpathy-skills" target="_blank" rel="noopener noreferrer">forrestchang/andrej-karpathy-skills</a>
-      </div>
-
-      <div class="card-summary">A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy&#39;s observations on LLM coding pitfalls.</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-05 00:00</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://github.com/forrestchang/andrej-karpathy-skills" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">X @levie</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://x.com/levie/status/2051057677984469277" target="_blank" rel="noopener noreferrer">@levie: Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent ve…</a>
-      </div>
-
-      <div class="card-summary">Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent vendors, or new internal agent engineering roles, the amount of work tha</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-03 21:53</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://x.com/levie/status/2051057677984469277" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">36氪</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://36kr.com/newsflashes/3795834368302088?f=rss" target="_blank" rel="noopener noreferrer">苹果考虑让英特尔、三星代工设备处理器</a>
-      </div>
-
-      <div class="card-summary">苹果公司正与英特尔、三星电子洽谈，计划将设备主处理器交由这两家企业生产，作为台积电之外的备选供应商。目前苹果与英特尔、三星的谈判仍处于初步阶段，尚未下达任何订单。苹果对采用非台积电技术仍存顾虑。受供应链中断影响（包括近期 AI 数据中心建设热潮、Mac 需求超预期导致的芯片短缺），苹果正考虑增加供应</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-05 12:09</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://36kr.com/newsflashes/3795834368302088?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">Hacker News</span>
       </div>
@@ -745,12 +474,89 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Hacker News</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.robert-glaser.de/when-everyone-has-ai-and-the-company-still-learns-nothing/" target="_blank" rel="noopener noreferrer">When everyone has AI and the company still learns nothing</a>
+      </div>
+
+      <div class="card-summary">When everyone has AI and the company still learns nothing</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 09:30</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.robert-glaser.de/when-everyone-has-ai-and-the-company-still-learns-nothing/" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Hacker News</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.nytimes.com/2026/05/04/technology/trump-ai-models.html" target="_blank" rel="noopener noreferrer">White House Considers Vetting A.I. Models Before They Are Released</a>
+      </div>
+
+      <div class="card-summary">White House Considers Vetting A.I. Models Before They Are Released</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 19:18</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.nytimes.com/2026/05/04/technology/trump-ai-models.html" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">Product Hunt</span>
       </div>
@@ -786,34 +592,39 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">Product Hunt</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener noreferrer">msitarzewski/agency-agents</a>
+        <a href="https://www.producthunt.com/products/tollecode" target="_blank" rel="noopener noreferrer">Tollecode</a>
       </div>
 
-      <div class="card-summary">A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a</div>
+      <div class="card-summary">&lt;p&gt;
+            A local AI coding assistant to delegate tasks to AI agents
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.c</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-04 05:39</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://www.producthunt.com/products/tollecode" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -823,86 +634,13 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">X @garrytan</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://x.com/garrytan/status/2051099735176659256" target="_blank" rel="noopener noreferrer">@garrytan: The goal of Personal AI: civilization where individual humans, augmented by AI,…</a>
-      </div>
-
-      <div class="card-summary">The goal of Personal AI: civilization where individual humans, augmented by AI, can do consequential work without being captured by extractive institu</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-04 00:40</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://x.com/garrytan/status/2051099735176659256" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
-        </div>
-        <span class="card-source">Hacker News</span>
-      </div>
-
-      <div class="card-title">
-        <a href="https://www.nytimes.com/2026/05/04/technology/trump-ai-models.html" target="_blank" rel="noopener noreferrer">White House Considers Vetting A.I. Models Before They Are Released</a>
-      </div>
-
-      <div class="card-summary">White House Considers Vetting A.I. Models Before They Are Released</div>
-
-      <div class="card-footer">
-        <div class="tags">
-          
-        </div>
-        <span class="card-time">05-04 19:18</span>
-      </div>
-
-      <div class="card-actions">
-        
-        <span></span>
-        
-        <a href="https://www.nytimes.com/2026/05/04/technology/trump-ai-models.html" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
-      </div>
-
-      
-
-    </article>
-    
-    
-    
-    
-    <article class="card" data-category="其他">
-
-      <div class="card-meta">
-        <div class="card-meta-left">
-          <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">Product Hunt</span>
       </div>
@@ -938,12 +676,421 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/flowstep" target="_blank" rel="noopener noreferrer">Flowstep 1.0</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            AI design engineer. Design &amp; ship real UI.
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products/flow</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">04-27 10:13</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/flowstep" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/kilocode" target="_blank" rel="noopener noreferrer">Kilo Code v7 for VS Code</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Parallel agents, diff reviewer, and multi-model comparisons
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">03-30 01:59</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/kilocode" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/openclick" target="_blank" rel="noopener noreferrer">Openclick</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            macOS agent that turns prompts into automated clicks
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 13:45</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/openclick" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/saastr-ai-your-ai-powered-b2b-advisor" target="_blank" rel="noopener noreferrer">Agentic API Grader by SaaStr.ai</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Your #1 new customer is an AI agent. Are they getting an A?
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 04:30</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/saastr-ai-your-ai-powered-b2b-advisor" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/blaze-your-new-calendar" target="_blank" rel="noopener noreferrer">Blaze</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            The AI-powered calendar that plans your day for you.
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">04-29 07:37</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/blaze-your-new-calendar" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/intuned" target="_blank" rel="noopener noreferrer">Intuned Agent</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Production browser automation, built and maintained by AI
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.co</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-01 10:11</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/intuned" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">Product Hunt</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://www.producthunt.com/products/vitract" target="_blank" rel="noopener noreferrer">Vitract</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;
+            Microbiome test kits with AI nutrition guidance
+          &lt;/p&gt;
+          &lt;p&gt;
+            &lt;a href=&#34;https://www.producthunt.com/products</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">04-30 14:29</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://www.producthunt.com/products/vitract" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer">affaan-m/everything-claude-code</a>
+      </div>
+
+      <div class="card-summary">The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencod</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/forrestchang/andrej-karpathy-skills" target="_blank" rel="noopener noreferrer">forrestchang/andrej-karpathy-skills</a>
+      </div>
+
+      <div class="card-summary">A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy&#39;s observations on LLM coding pitfalls.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/forrestchang/andrej-karpathy-skills" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener noreferrer">msitarzewski/agency-agents</a>
+      </div>
+
+      <div class="card-summary">A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">GitHub Trending</span>
       </div>
@@ -975,12 +1122,323 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/gsd-build/get-shit-done" target="_blank" rel="noopener noreferrer">gsd-build/get-shit-done</a>
+      </div>
+
+      <div class="card-summary">A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/gsd-build/get-shit-done" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/sansan0/TrendRadar" target="_blank" rel="noopener noreferrer">sansan0/TrendRadar</a>
+      </div>
+
+      <div class="card-summary">⭐AI-driven public opinion &amp; trend monitor with multi-platform aggregation, RSS, and smart alerts.🎯 告别信息过载，你的 AI 舆情监控助手与热点筛选工具！聚合多平台热点 + RSS 订阅，支持关键词精准</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/sansan0/TrendRadar" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/ruvnet/ruflo" target="_blank" rel="noopener noreferrer">ruvnet/ruflo</a>
+      </div>
+
+      <div class="card-summary">🌊 The leading agent orchestration platform for Claude. Deploy intelligent multi-agent swarms, coordinate autonomous workflows, and build conversationa</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/ruvnet/ruflo" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/coreyhaines31/marketingskills" target="_blank" rel="noopener noreferrer">coreyhaines31/marketingskills</a>
+      </div>
+
+      <div class="card-summary">Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/coreyhaines31/marketingskills" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/virattt/dexter" target="_blank" rel="noopener noreferrer">virattt/dexter</a>
+      </div>
+
+      <div class="card-summary">An autonomous agent for deep financial research</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/virattt/dexter" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">GitHub Trending</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" rel="noopener noreferrer">cheahjs/free-llm-api-resources</a>
+      </div>
+
+      <div class="card-summary">A list of free LLM inference resources accessible via API.</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 00:00</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">X @petergyang</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/petergyang/status/2051136319104098445" target="_blank" rel="noopener noreferrer">@petergyang: I tweeted this as a joke but it&#39;s literally what I&#39;m doing right now lol sigh ht…</a>
+      </div>
+
+      <div class="card-summary">I tweeted this as a joke but it&#39;s literally what I&#39;m doing right now lol sigh https://t.co/dEpf9jcFRa</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 03:06</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://x.com/petergyang/status/2051136319104098445" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">X @petergyang</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/petergyang/status/2051129249348894754" target="_blank" rel="noopener noreferrer">@petergyang: I caved and downloaded Hermes to try. 
+
+For those of you who have tried both Her…</a>
+      </div>
+
+      <div class="card-summary">I caved and downloaded Hermes to try. 
+
+For those of you who have tried both Hermes and OpenClaw what difference do you notice?
+
+No shilling please, j</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 02:38</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://x.com/petergyang/status/2051129249348894754" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">X @petergyang</span>
       </div>
@@ -1018,34 +1476,39 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Hacker News</span>
+        <span class="card-source">X @amasad</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.robert-glaser.de/when-everyone-has-ai-and-the-company-still-learns-nothing/" target="_blank" rel="noopener noreferrer">When everyone has AI and the company still learns nothing</a>
+        <a href="https://x.com/amasad/status/2051167532523074015" target="_blank" rel="noopener noreferrer">@amasad: 10 active, 198 draft, 700+ done.
+
+I don&#39;t think there&#39;s more agentic parallelism…</a>
       </div>
 
-      <div class="card-summary">When everyone has AI and the company still learns nothing</div>
+      <div class="card-summary">10 active, 198 draft, 700+ done.
+
+I don&#39;t think there&#39;s more agentic parallelism happening anywhere else on the internet than what happens on @Replit.</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 09:30</span>
+        <span class="card-time">05-04 05:10</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.robert-glaser.de/when-everyone-has-ai-and-the-company-still-learns-nothing/" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/amasad/status/2051167532523074015" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1055,38 +1518,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @amasad</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/tollecode" target="_blank" rel="noopener noreferrer">Tollecode</a>
+        <a href="https://x.com/amasad/status/2051166676256014844" target="_blank" rel="noopener noreferrer">@amasad: Man, I miss staying up for days hacking https://t.co/Ib6tzs2FLz</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            A local AI coding assistant to delegate tasks to AI agents
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.c</div>
+      <div class="card-summary">Man, I miss staying up for days hacking https://t.co/Ib6tzs2FLz</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-04 05:39</span>
+        <span class="card-time">05-04 05:06</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/tollecode" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/amasad/status/2051166676256014844" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1096,34 +1556,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @amasad</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/gsd-build/get-shit-done" target="_blank" rel="noopener noreferrer">gsd-build/get-shit-done</a>
+        <a href="https://x.com/amasad/status/2051007848440877242" target="_blank" rel="noopener noreferrer">@amasad: Amazing what a single day of marathon vibe coding can achieve. https://t.co/4AUx…</a>
       </div>
 
-      <div class="card-summary">A light-weight and powerful meta-prompting, context engineering and spec-driven development system for Claude Code by TÂCHES.</div>
+      <div class="card-summary">Amazing what a single day of marathon vibe coding can achieve. https://t.co/4AUxk6s74i</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-03 18:35</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/gsd-build/get-shit-done" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/amasad/status/2051007848440877242" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1133,12 +1594,51 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">X @levie</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://x.com/levie/status/2051057677984469277" target="_blank" rel="noopener noreferrer">@levie: Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent ve…</a>
+      </div>
+
+      <div class="card-summary">Whether it&#39;s existing consulting firms, new ones that emerge, FDEs from agent vendors, or new internal agent engineering roles, the amount of work tha</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-03 21:53</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://x.com/levie/status/2051057677984469277" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">X @levie</span>
       </div>
@@ -1170,38 +1670,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @garrytan</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/blaze-your-new-calendar" target="_blank" rel="noopener noreferrer">Blaze</a>
+        <a href="https://x.com/garrytan/status/2051110206466302136" target="_blank" rel="noopener noreferrer">@garrytan: This is why GBrain is open source. Why I run my own stack. The explosion in inte…</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            The AI-powered calendar that plans your day for you.
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+      <div class="card-summary">This is why GBrain is open source. Why I run my own stack. The explosion in intelligence means building your own context is more important than ever. </div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">04-29 07:37</span>
+        <span class="card-time">05-04 01:22</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/blaze-your-new-calendar" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/garrytan/status/2051110206466302136" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1211,34 +1708,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @garrytan</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/sansan0/TrendRadar" target="_blank" rel="noopener noreferrer">sansan0/TrendRadar</a>
+        <a href="https://x.com/garrytan/status/2051099735176659256" target="_blank" rel="noopener noreferrer">@garrytan: The goal of Personal AI: civilization where individual humans, augmented by AI,…</a>
       </div>
 
-      <div class="card-summary">⭐AI-driven public opinion &amp; trend monitor with multi-platform aggregation, RSS, and smart alerts.🎯 告别信息过载，你的 AI 舆情监控助手与热点筛选工具！聚合多平台热点 + RSS 订阅，支持关键词精准</div>
+      <div class="card-summary">The goal of Personal AI: civilization where individual humans, augmented by AI, can do consequential work without being captured by extractive institu</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-04 00:40</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/sansan0/TrendRadar" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/garrytan/status/2051099735176659256" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1248,12 +1746,13 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
         <span class="card-source">X @zarazhangrui</span>
       </div>
@@ -1285,38 +1784,39 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @nikunj</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/saastr-ai-your-ai-powered-b2b-advisor" target="_blank" rel="noopener noreferrer">Agentic API Grader by SaaStr.ai</a>
+        <a href="https://x.com/nikunj/status/2051096096110502063" target="_blank" rel="noopener noreferrer">@nikunj: Never give up on your dreams.. persistence has immense alpha. 
+
+Bullish on this…</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            Your #1 new customer is an AI agent. Are they getting an A?
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.</div>
+      <div class="card-summary">Never give up on your dreams.. persistence has immense alpha. 
+
+Bullish on this kid 🫡 https://t.co/vgUxB18LM8</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-04 04:30</span>
+        <span class="card-time">05-04 00:26</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/saastr-ai-your-ai-powered-b2b-advisor" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/nikunj/status/2051096096110502063" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1326,34 +1826,39 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @steipete</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/ruvnet/ruflo" target="_blank" rel="noopener noreferrer">ruvnet/ruflo</a>
+        <a href="https://x.com/steipete/status/2051088325100831046" target="_blank" rel="noopener noreferrer">@steipete: Released 🚦RepoBar 0.4.0.
+
+This one makes the GitHub menu a lot smarter: persiste…</a>
       </div>
 
-      <div class="card-summary">🌊 The leading agent orchestration platform for Claude. Deploy intelligent multi-agent swarms, coordinate autonomous workflows, and build conversationa</div>
+      <div class="card-summary">Released 🚦RepoBar 0.4.0.
+
+This one makes the GitHub menu a lot smarter: persistent SQLite caching, fewer wasted API calls, visible rate limits, better</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-03 23:55</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/ruvnet/ruflo" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/steipete/status/2051088325100831046" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1363,38 +1868,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @steipete</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/kilocode" target="_blank" rel="noopener noreferrer">Kilo Code v7 for VS Code</a>
+        <a href="https://x.com/steipete/status/2051044240013083133" target="_blank" rel="noopener noreferrer">@steipete: brb calling @sama https://t.co/tORl3zzr3c</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            Parallel agents, diff reviewer, and multi-model comparisons
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.</div>
+      <div class="card-summary">brb calling @sama https://t.co/tORl3zzr3c</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">03-30 01:59</span>
+        <span class="card-time">05-03 21:00</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/kilocode" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/steipete/status/2051044240013083133" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1404,34 +1906,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @steipete</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/coreyhaines31/marketingskills" target="_blank" rel="noopener noreferrer">coreyhaines31/marketingskills</a>
+        <a href="https://x.com/steipete/status/2051033065367970195" target="_blank" rel="noopener noreferrer">@steipete: New claw beta is up! Id you&#39;re on our Discord, you can get the soundtrack. https…</a>
       </div>
 
-      <div class="card-summary">Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.</div>
+      <div class="card-summary">New claw beta is up! Id you&#39;re on our Discord, you can get the soundtrack. https://t.co/6OTnLxF7ao https://t.co/rOtRP2eORb</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-03 20:16</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/coreyhaines31/marketingskills" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/steipete/status/2051033065367970195" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1441,38 +1944,39 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @danshipper</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/openclick" target="_blank" rel="noopener noreferrer">Openclick</a>
+        <a href="https://x.com/danshipper/status/2050997402514161781" target="_blank" rel="noopener noreferrer">@danshipper: no mythos this week! 
+
+but some interesting stuff coming :) https://t.co/OEo0l4a…</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            macOS agent that turns prompts into automated clicks
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.com/pro</div>
+      <div class="card-summary">no mythos this week! 
+
+but some interesting stuff coming :) https://t.co/OEo0l4aeZR</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-04 13:45</span>
+        <span class="card-time">05-03 17:54</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/openclick" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/danshipper/status/2050997402514161781" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1482,34 +1986,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @sama</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/virattt/dexter" target="_blank" rel="noopener noreferrer">virattt/dexter</a>
+        <a href="https://x.com/sama/status/2050998576671859003" target="_blank" rel="noopener noreferrer">@sama: Agents SDK 2.0 is underrated</a>
       </div>
 
-      <div class="card-summary">An autonomous agent for deep financial research</div>
+      <div class="card-summary">Agents SDK 2.0 is underrated</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-03 17:59</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/virattt/dexter" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/sama/status/2050998576671859003" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1519,38 +2024,35 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">Product Hunt</span>
+        <span class="card-source">X @sama</span>
       </div>
 
       <div class="card-title">
-        <a href="https://www.producthunt.com/products/vitract" target="_blank" rel="noopener noreferrer">Vitract</a>
+        <a href="https://x.com/sama/status/2050964040026050727" target="_blank" rel="noopener noreferrer">@sama: impossible to imagine openai succeeding without greg!</a>
       </div>
 
-      <div class="card-summary">&lt;p&gt;
-            Microbiome test kits with AI nutrition guidance
-          &lt;/p&gt;
-          &lt;p&gt;
-            &lt;a href=&#34;https://www.producthunt.com/products</div>
+      <div class="card-summary">impossible to imagine openai succeeding without greg!</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">04-30 14:29</span>
+        <span class="card-time">05-03 15:41</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://www.producthunt.com/products/vitract" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/sama/status/2050964040026050727" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1560,34 +2062,238 @@ body {
     
     
     
-    <article class="card" data-category="其他">
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
 
       <div class="card-meta">
         <div class="card-meta-left">
           <span class="cat-pill" data-cat="其他">其他</span>
-          <span class="stars"><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-filled">★</span><span class="star-empty">☆</span><span class="star-empty">☆</span></span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
         </div>
-        <span class="card-source">GitHub Trending</span>
+        <span class="card-source">X @sama</span>
       </div>
 
       <div class="card-title">
-        <a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" rel="noopener noreferrer">cheahjs/free-llm-api-resources</a>
+        <a href="https://x.com/sama/status/2050964008480723059" target="_blank" rel="noopener noreferrer">@sama: it has been a real pleasure to work with Greg over the past decade. i feel very…</a>
       </div>
 
-      <div class="card-summary">A list of free LLM inference resources accessible via API.</div>
+      <div class="card-summary">it has been a real pleasure to work with Greg over the past decade. i feel very lucky.
+
+this post held up pretty well, but not did not sufficiently hi</div>
 
       <div class="card-footer">
         <div class="tags">
           
         </div>
-        <span class="card-time">05-05 00:00</span>
+        <span class="card-time">05-03 15:41</span>
       </div>
 
       <div class="card-actions">
         
         <span></span>
         
-        <a href="https://github.com/cheahjs/free-llm-api-resources" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="https://x.com/sama/status/2050964008480723059" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">36氪</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/p/3794961189821698?f=rss" target="_blank" rel="noopener noreferrer">五月，适合想清楚一件事｜幕启</a>
+      </div>
+
+      <div class="card-summary">&lt;p class=&#34;image-wrapper&#34;&gt;&lt;img src=&#34;https://img.36krcdn.com/hsossms/20260504/v2_5ef3b16f1e4e43169a275cb124e3bc5d@5509299_oswg3314242oswg1690oswg1671_im</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-04 20:41</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://36kr.com/p/3794961189821698?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">36氪</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/p/3789475357400068?f=rss" target="_blank" rel="noopener noreferrer">卓驭于贝贝：向物理AI转型，是生存法则的必然选择 | 最前线</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;文｜肖漫&lt;/p&gt;
+  &lt;p&gt;编辑｜李勤&lt;/p&gt;
+  &lt;p&gt;当下的智能汽车领域，物理 AI 已成为高频词汇，绝大多数智能驾驶算法厂商都在往“物理AI”转型。&lt;/p&gt;
+  &lt;p&gt;卓驭在北京车展上也发布了面向移动物理 AI 的原生多模态基础模型。在卓驭科技副总裁于贝贝看来，算法厂商向物理AI转型不是</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-02 21:17</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://36kr.com/p/3789475357400068?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">36氪</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/p/3791796527602951?f=rss" target="_blank" rel="noopener noreferrer">又一算力独角兽，冲击IPO</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;作者丨韦香惠&lt;/p&gt;
+  &lt;p&gt;来源丨东四十条资本&lt;/p&gt;
+  &lt;p&gt;A股即将迎来一只“算力独角兽”，估值已站上500亿元门槛。&lt;/p&gt;
+  &lt;p&gt;主角是来自河南的超聚变数字技术股份有限公司。从今年1月提交上市辅导备案，到IPO辅导工作完成，仅用四个多月时间。&lt;/p&gt;
+  &lt;p&gt;这家公司并非“</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-02 15:38</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://36kr.com/p/3791796527602951?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">36氪</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/p/3791662444911617?f=rss" target="_blank" rel="noopener noreferrer">苹果官方App误打包了Claude.md，这么大的公司也Vibe Coding啊？</a>
+      </div>
+
+      <div class="card-summary">&lt;p&gt;梦晨 发自 凹非寺&lt;/p&gt;
+  &lt;p&gt;苹果大失误！把自用的Claude.md打包到了官方App里。&lt;/p&gt;
+  &lt;p&gt;这下直接被坐实了：&lt;strong&gt;苹果内部在使用Claude Code构建生产级应用&lt;/strong&gt;。&lt;/p&gt;
+  &lt;p&gt;这么大的公司，也在Vibe Coding？&lt;/p&gt;
+</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-02 14:52</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://36kr.com/p/3791662444911617?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+      </div>
+
+      
+
+    </article>
+    
+    
+    
+    
+    
+    <article class="card" data-category="其他" style="--card-accent:#52526a;--bar-color:#52526a;">
+
+      <div class="card-meta">
+        <div class="card-meta-left">
+          <span class="cat-pill" data-cat="其他">其他</span>
+          <div class="signal-bars"><span class="bar on"></span><span class="bar on"></span><span class="bar on"></span><span class="bar"></span><span class="bar"></span></div>
+        </div>
+        <span class="card-source">36氪</span>
+      </div>
+
+      <div class="card-title">
+        <a href="https://36kr.com/newsflashes/3795834368302088?f=rss" target="_blank" rel="noopener noreferrer">苹果考虑让英特尔、三星代工设备处理器</a>
+      </div>
+
+      <div class="card-summary">苹果公司正与英特尔、三星电子洽谈，计划将设备主处理器交由这两家企业生产，作为台积电之外的备选供应商。目前苹果与英特尔、三星的谈判仍处于初步阶段，尚未下达任何订单。苹果对采用非台积电技术仍存顾虑。受供应链中断影响（包括近期 AI 数据中心建设热潮、Mac 需求超预期导致的芯片短缺），苹果正考虑增加供应</div>
+
+      <div class="card-footer">
+        <div class="tags">
+          
+        </div>
+        <span class="card-time">05-05 12:09</span>
+      </div>
+
+      <div class="card-actions">
+        
+        <span></span>
+        
+        <a href="https://36kr.com/newsflashes/3795834368302088?f=rss" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
       </div>
 
       
@@ -1597,7 +2303,7 @@ body {
   </div>
 
   <div class="footer">
-    Powered by Miss Ling AI · 生成于 2026-05-05 20:16
+    Miss Ling AI &nbsp;·&nbsp; Generated 2026-05-05 20:58
   </div>
 
 </div>
@@ -1611,7 +2317,7 @@ function toggleDetails(btn) {
 }
 
 var filterBar = document.getElementById('filterBar');
-var cardList = document.getElementById('cardList');
+var cardList  = document.getElementById('cardList');
 
 filterBar.addEventListener('click', function(e) {
   var pill = e.target.closest('.pill');
@@ -1620,11 +2326,7 @@ filterBar.addEventListener('click', function(e) {
   pill.classList.add('active');
   var filter = pill.dataset.filter;
   cardList.querySelectorAll('.card').forEach(function(card) {
-    if (filter === 'all' || card.dataset.category === filter) {
-      card.classList.remove('hidden');
-    } else {
-      card.classList.add('hidden');
-    }
+    card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter);
   });
 });
 </script>
