@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import time
 
 import anthropic
@@ -37,6 +36,20 @@ importance 评分标准（面向 AI 产品经理视角打分）：
 3分 = 参考：有价值但不紧急（一般性产品更新、社区讨论热点）
 2分 = 了解：背景信息，扫一眼即可
 1分 = 低优：边缘内容，与产品决策关联弱"""
+
+
+def _extract_json(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[-1]
+    if text.endswith("```"):
+        text = text.rsplit("```", 1)[0]
+    text = text.strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        return text[start:end + 1]
+    return text
 
 
 def _build_user_prompt(item: RawItem) -> str:
@@ -77,20 +90,8 @@ def summarize_item(item: RawItem, client: anthropic.Anthropic) -> DigestedItem:
             ],
             messages=[{"role": "user", "content": _build_user_prompt(item)}],
         )
-        raw_text = response.content[0].text.strip()
-        if raw_text.startswith("```"):
-            raw_text = raw_text.split("```")[1]
-            if raw_text.startswith("json"):
-                raw_text = raw_text[4:]
-            raw_text = raw_text.strip()
-        try:
-            data = json.loads(raw_text)
-        except json.JSONDecodeError:
-            m = re.search(r'\{.*\}', raw_text, re.DOTALL)
-            if m:
-                data = json.loads(m.group())
-            else:
-                raise
+        raw_text = _extract_json(response.content[0].text)
+        data = json.loads(raw_text)
         raw_category = str(data.get("category", "其他"))
         category = raw_category if raw_category in _VALID_CATEGORIES else "其他"
         title_zh = str(data.get("title_zh", "")) or item.title
