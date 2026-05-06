@@ -66,9 +66,9 @@ ai-news/
   - 模型：claude-sonnet-4-6（claude-sonnet-4-20250514 在当前账号 404，已弃用）
   - system prompt 用 cache_control: ephemeral 标记，30条/批复用同一缓存，降低 token 成本
   - 顺序处理，条目间 sleep 0.5s 避免 rate limit
-  - 降级策略：API key 缺失/JSON 解析失败/API 异常，返回 summary_zh=原文前150字，其余字段为空/默认值
-  - JSON 解析有双重兜底：先剥 markdown fence，再用 regex 提取 {...} 块
-  - prompt 面向 AI 产品经理视角，输出 8 个字段（见 DigestedItem）
+  - 降级策略：API key 缺失/tool_use 解析失败/API 异常，返回 summary_zh=原文前150字，其余字段为空/默认值
+  - 结构化输出：使用 tool_use + tool_choice={"type":"tool","name":"save_digest"} 强制输出，response.content 中找 type=="tool_use" 的 block，直接读 .input（已是 dict），无需任何 JSON 解析，从根本上消除 unescaped 引号导致的解析失败
+  - prompt 面向 AI 产品经理视角，8 个字段通过 tool input_schema 强制类型+必填（见 DigestedItem）
 - filter.py 设计决策（Module 2）：
   - URL 去重只剥离 utm_* 参数，fragment 保留
   - score 阈值：hn>=50，github>=20，x>=30，其余 source 为 0
@@ -82,6 +82,13 @@ ai-news/
   - 写入 docs/index.html（覆盖）+ docs/archive/YYYY-MM-DD.html（覆盖，每日一份）
   - 空 items 时渲染"今日暂无内容"提示页，不报错退出
   - --dry-run 模式用 _raw_to_fallback() 生成 DigestedItem 占位，验证模板不崩
+- templates/daily.html 设计决策：
+  - 字体：标题用 Space Grotesk（Google Fonts），标签/时间戳/按钮/标签用 JetBrains Mono；均有系统字体 fallback
+  - 配色：背景 #0a0a0f 极暗系；分类颜色编码：蓝=#3b82f6(AI产品)、紫=#8b5cf6(商业动态)、绿=#10b981(开源生态)、橙=#f97316(行业落地)、紫罗兰=#a78bfa(模型能力)
+  - 重要度：信号强度条（5档高度渐变）替代星级，颜色跟随分类
+  - 卡片左侧边框：hover 时亮起分类色（CSS custom property --card-accent 内联注入）
+  - So What 按钮：终端风格，CSS ::before 注入 "> " 前缀
+  - 筛选 tab：JetBrains Mono 大写，矩形边框，激活态显示分类色
 
 ## DigestedItem 字段说明
 | 字段 | 类型 | 说明 |
