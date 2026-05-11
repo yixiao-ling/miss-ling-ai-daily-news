@@ -44,11 +44,24 @@ body {
 }
 .container { max-width: 780px; margin: 0 auto; padding: 0 20px; }
 
+/* ── Bilingual switching ── */
+.lang-en { display: none; }
+body.en .lang-zh { display: none; }
+body.en span.lang-en { display: inline; }
+body.en div.lang-en,
+body.en ul.lang-en { display: block; }
+
 /* ── Header ── */
 .header {
   padding: 36px 0 28px;
   border-bottom: 1px solid var(--card-border);
   margin-bottom: 28px;
+}
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 }
 .header-title {
   display: flex;
@@ -78,6 +91,38 @@ body {
 .header-meta .live {
   color: #10b981;
   font-weight: 500;
+}
+
+/* ── Language toggle ── */
+.lang-toggle {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+.lang-btn {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.lang-btn:first-child { border-radius: 4px 0 0 4px; }
+.lang-btn:last-child { border-radius: 0 4px 4px 0; border-left: none; }
+.lang-btn.active {
+  background: rgba(255,255,255,0.07);
+  color: var(--text);
+  border-color: rgba(255,255,255,0.30);
+}
+.lang-btn:hover:not(.active) {
+  color: var(--text-secondary);
+  border-color: rgba(255,255,255,0.22);
 }
 
 /* ── Filter bar ── */
@@ -332,14 +377,31 @@ body {
 </head>
 <body>
 
+{% set cat_en_map = {
+  "模型能力": "MODEL",
+  "AI产品":   "PRODUCTS",
+  "商业动态": "BUSINESS",
+  "开源生态": "OPEN SOURCE",
+  "行业落地": "INDUSTRY",
+  "其他":     "OTHER"
+} %}
+
 <div class="header">
   <div class="container">
-    <div class="header-title">
-      <div class="header-dot"></div>
-      <h1>Miss Ling AI Daily</h1>
-    </div>
-    <div class="header-meta">
-      // {{ date }} &nbsp;·&nbsp; {{ items|length }} items &nbsp;·&nbsp; <span class="live">LIVE</span>
+    <div class="header-top">
+      <div>
+        <div class="header-title">
+          <div class="header-dot"></div>
+          <h1>Miss Ling AI Daily</h1>
+        </div>
+        <div class="header-meta">
+          // {{ date }} &nbsp;·&nbsp; {{ items|length }} items &nbsp;·&nbsp; <span class="live">LIVE</span>
+        </div>
+      </div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnZh" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
+      </div>
     </div>
   </div>
 </div>
@@ -347,10 +409,14 @@ body {
 <div class="container">
 
   <div class="filter-bar" id="filterBar">
-    <button class="pill active" data-filter="all">ALL</button>
+    <button class="pill active" data-filter="all">
+      <span class="lang-zh">全部</span><span class="lang-en">ALL</span>
+    </button>
     {% for cat, count in category_pills %}
     {% if cat != "其他" %}
-    <button class="pill" data-filter="{{ cat }}">{{ cat }}<span class="pill-count">{{ count }}</span></button>
+    <button class="pill" data-filter="{{ cat }}">
+      <span class="lang-zh">{{ cat }}</span><span class="lang-en">{{ cat_en_map.get(cat, cat) }}</span><span class="pill-count">{{ count }}</span>
+    </button>
     {% endif %}
     {% endfor %}
   </div>
@@ -367,14 +433,18 @@ body {
   <div class="card-list" id="cardList">
     {% for item in items %}
     {% set cat = item.category if item.category else "其他" %}
-    {% set title = item.title_zh if item.title_zh else item.raw.title %}
+    {% set title_zh_val = item.title_zh if item.title_zh else item.raw.title %}
+    {% set title_en_val = item.title_en if item.title_en else item.raw.title %}
     {% set so_what = item.so_what if item.so_what else "" %}
+    {% set so_what_en = item.so_what_en if item.so_what_en else "" %}
     {% set accent = cat_colors[cat] if cat in cat_colors else "#52526a" %}
     <article class="card" data-category="{{ cat }}" style="--card-accent:{{ accent }};--bar-color:{{ accent }};">
 
       <div class="card-meta">
         <div class="card-meta-left">
-          <span class="cat-pill" data-cat="{{ cat }}">{{ cat }}</span>
+          <span class="cat-pill" data-cat="{{ cat }}">
+            <span class="lang-zh">{{ cat }}</span><span class="lang-en">{{ cat_en_map.get(cat, cat) }}</span>
+          </span>
           <div class="signal-bars">
             {%- for i in range(1, 6) -%}
             <span class="bar{% if i <= item.importance %} on{% endif %}"></span>
@@ -385,10 +455,15 @@ body {
       </div>
 
       <div class="card-title">
-        <a href="{{ item.raw.url }}" target="_blank" rel="noopener noreferrer">{{ title }}</a>
+        <a href="{{ item.raw.url }}" target="_blank" rel="noopener noreferrer">
+          <span class="lang-zh">{{ title_zh_val }}</span><span class="lang-en">{{ title_en_val }}</span>
+        </a>
       </div>
 
-      <div class="card-summary">{{ item.summary_zh }}</div>
+      <div class="card-summary">
+        <span class="lang-zh">{{ item.summary_zh }}</span>
+        <span class="lang-en">{{ item.summary_en if item.summary_en else item.summary_zh }}</span>
+      </div>
 
       <div class="card-footer">
         <div class="tags">
@@ -398,33 +473,46 @@ body {
       </div>
 
       <div class="card-actions">
-        {% if so_what %}
+        {% if so_what or so_what_en %}
         <button class="btn-sowhat" onclick="toggleDetails(this)">
           So What? <span class="arrow">▾</span>
         </button>
         {% else %}
         <span></span>
         {% endif %}
-        <a href="{{ item.raw.url }}" target="_blank" rel="noopener noreferrer" class="btn-source">查看原文 →</a>
+        <a href="{{ item.raw.url }}" target="_blank" rel="noopener noreferrer" class="btn-source">
+          <span class="lang-zh">查看原文 →</span><span class="lang-en">Read More →</span>
+        </a>
       </div>
 
-      {% if so_what %}
+      {% if so_what or so_what_en %}
       <div class="details">
         <div class="details-section">
-          <div class="details-label">// 影响分析</div>
-          <div class="details-body">{{ so_what }}</div>
+          <div class="details-label">
+            <span class="lang-zh">// 影响分析</span><span class="lang-en">// Impact Analysis</span>
+          </div>
+          <div class="details-body lang-zh">{{ so_what }}</div>
+          <div class="details-body lang-en">{{ so_what_en }}</div>
         </div>
-        {% if item.eli5 %}
+        {% if item.eli5 or item.eli5_en %}
         <div class="details-section">
-          <div class="details-label">// 大白话</div>
-          <div class="details-body">{{ item.eli5 }}</div>
+          <div class="details-label">
+            <span class="lang-zh">// 大白话</span><span class="lang-en">// ELI5</span>
+          </div>
+          <div class="details-body lang-zh">{{ item.eli5 }}</div>
+          <div class="details-body lang-en">{{ item.eli5_en if item.eli5_en else item.eli5 }}</div>
         </div>
         {% endif %}
-        {% if item.use_cases %}
+        {% if item.use_cases or item.use_cases_en %}
         <div class="details-section">
-          <div class="details-label">// 应用场景</div>
-          <ul>
+          <div class="details-label">
+            <span class="lang-zh">// 应用场景</span><span class="lang-en">// Use Cases</span>
+          </div>
+          <ul class="lang-zh">
             {% for uc in item.use_cases %}<li>{{ uc }}</li>{% endfor %}
+          </ul>
+          <ul class="lang-en">
+            {% for uc in item.use_cases_en %}<li>{{ uc }}</li>{% endfor %}
           </ul>
         </div>
         {% endif %}
@@ -433,7 +521,9 @@ body {
 
     </article>
     {% else %}
-    <div style="text-align:center;padding:60px 0;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:13px;">// 今日暂无内容</div>
+    <div style="text-align:center;padding:60px 0;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:13px;">
+      <span class="lang-zh">// 今日暂无内容</span><span class="lang-en">// No content today</span>
+    </div>
     {% endfor %}
   </div>
 
@@ -444,6 +534,20 @@ body {
 </div>
 
 <script>
+function setLang(lang) {
+  document.body.classList.toggle('en', lang === 'en');
+  document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'zh-CN');
+  document.getElementById('btnZh').classList.toggle('active', lang === 'zh');
+  document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+  try { localStorage.setItem('lang', lang); } catch(e) {}
+}
+
+(function() {
+  var lang = 'zh';
+  try { lang = localStorage.getItem('lang') || 'zh'; } catch(e) {}
+  if (lang === 'en') setLang('en');
+})();
+
 function toggleDetails(btn) {
   var card = btn.closest('.card');
   var details = card.querySelector('.details');

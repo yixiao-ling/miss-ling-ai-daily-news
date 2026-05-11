@@ -29,3 +29,9 @@ class DigestedItem:
     title_zh: str = ""      # 中文标题；原文非中文时翻译，中文则原样输出
     category: str = "其他"  # 模型能力 / AI产品 / 商业动态 / 开源生态 / 行业落地 / 其他
     so_what: str = ""       # 影响分析 100-150 字，面向 AI 产品经理
+    # English fields (bilingual support)
+    title_en: str = ""
+    summary_en: str = ""
+    eli5_en: str = ""
+    so_what_en: str = ""
+    use_cases_en: list = field(default_factory=list)
