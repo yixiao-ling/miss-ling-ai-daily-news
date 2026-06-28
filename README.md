@@ -1,6 +1,6 @@
 # Miss Ling AI 日报
 
-每日自动采集 AI 行业资讯，经 Claude AI 提炼摘要，生成精华日报。
+每日自动采集 AI 行业资讯，经 DeepSeek AI 提炼摘要（面向 AI builder 视角），生成精华日报。
 
 ## 数据源
 - Hacker News（AI 相关热帖）
@@ -12,14 +12,14 @@
 ## 本地运行
 ```bash
 pip install -r requirements.txt
-export ANTHROPIC_API_KEY=your_key_here
+export DEEPSEEK_API_KEY=your_key_here
 python -m src.main
 ```
 
 ## 部署
 1. Fork 本仓库
 2. Settings → Pages → Source 选择 main 分支 /docs 目录
-3. Settings → Secrets → 添加 ANTHROPIC_API_KEY
+3. Settings → Secrets → 添加 DEEPSEEK_API_KEY
 4. Actions 自动每天 09:00（北京时间）运行
 
 ## 手动触发

@@ -516,6 +516,22 @@ body.en ul.lang-en { display: block; }
           </ul>
         </div>
         {% endif %}
+        {% if item.org_efficiency %}
+        <div class="details-section">
+          <div class="details-label">
+            <span class="lang-zh">// 组织效率参考</span><span class="lang-en">// Org Efficiency</span>
+          </div>
+          <div class="details-body">{{ item.org_efficiency }}</div>
+        </div>
+        {% endif %}
+        {% if item.data_annotation %}
+        <div class="details-section">
+          <div class="details-label">
+            <span class="lang-zh">// 数据标注参考</span><span class="lang-en">// Data Annotation</span>
+          </div>
+          <div class="details-body">{{ item.data_annotation }}</div>
+        </div>
+        {% endif %}
       </div>
       {% endif %}
 

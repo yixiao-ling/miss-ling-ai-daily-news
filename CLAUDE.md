@@ -1,14 +1,14 @@
 # Miss Ling AI 日报
 
 ## 项目简介
-一款面向 **AI 产品经理**的每日资讯聚合工具。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集内容，经本地关键词过滤、去重、Claude AI 摘要处理，生成每日精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
+一款面向 **AI builder（产品 + 算法）**的每日资讯聚合工具。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集内容，经本地关键词过滤、去重、DeepSeek AI 摘要处理，生成每日精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
 
-目标受众特征：懂技术原理、关注产品落地、重视商业价值、需要快速判断信息优先级。
+目标受众特征：既懂模型/算法原理与工程实现，也关注产品落地、商业价值、需要快速判断信息优先级。
 
 ## 技术栈
 - 语言：Python 3.11
 - 采集：requests, feedparser, PRAW（Reddit 已移除，保留接口以备扩展）
-- AI 摘要：anthropic SDK（claude-sonnet-4-6）
+- AI 摘要：openai SDK（DeepSeek，OpenAI 兼容接口，模型 deepseek-chat）
 - 模板渲染：Jinja2
 - 自动化：GitHub Actions（cron 每日 UTC 01:00 触发）
 - 部署：GitHub Pages（docs/ 目录）
@@ -20,7 +20,7 @@ ai-news/
 │   ├── schema.py            # RawItem / DigestedItem dataclass 定义
 │   ├── fetch_sources.py     # 5个数据源采集：HN / PH / GitHub / X / RSS
 │   ├── filter.py            # Module 2：关键词过滤 & 阈值过滤 & URL去重 & 截量
-│   ├── summarize.py         # Module 3：Claude AI 摘要生成（prompt caching + fallback）
+│   ├── summarize.py         # Module 3：DeepSeek AI 摘要生成（function calling + fallback）
 │   ├── render.py            # Module 4/5：Jinja2 → docs/index.html + docs/archive/YYYY-MM-DD.html
 │   └── main.py              # 入口：--dry-run / --source 参数，串联所有模块
 ├── templates/
@@ -34,7 +34,7 @@ ai-news/
 ├── .github/workflows/
 │   └── daily.yml            # Module 7 占位：GitHub Actions cron 定时任务
 ├── .gitignore
-├── requirements.txt         # anthropic, feedparser, requests, bs4, jinja2
+├── requirements.txt         # openai, feedparser, requests, bs4, jinja2
 ├── README.md
 └── CLAUDE.md
 
@@ -52,7 +52,7 @@ ai-news/
 - GitHub Actions：push 后在 Actions tab 查看运行日志
 
 ## 环境变量
-- ANTHROPIC_API_KEY：必须，Claude API 密钥
+- DEEPSEEK_API_KEY：必须，DeepSeek API 密钥
 - REDDIT_CLIENT_ID：可选，Reddit API（当前未启用）
 - REDDIT_SECRET：可选，Reddit API（当前未启用）
 
@@ -61,14 +61,15 @@ ai-news/
 - GitHub Trending 通过抓取页面获取，若结构变化需更新解析逻辑
 - Product Hunt 使用官方 Atom feed，无需 API Key
 - HN 使用 Algolia Search API，免费无需 Key
-- Claude API 调用失败时降级展示原标题+截断摘要，不阻塞页面生成
+- DeepSeek API 调用失败时降级展示原标题+截断摘要，不阻塞页面生成
 - summarize.py 设计决策（Module 3）：
-  - 模型：claude-sonnet-4-6（claude-sonnet-4-20250514 在当前账号 404，已弃用）
-  - system prompt 用 cache_control: ephemeral 标记，30条/批复用同一缓存，降低 token 成本
+  - 服务商：DeepSeek（OpenAI 兼容接口），openai SDK，base_url=https://api.deepseek.com，模型 deepseek-chat
+  - DeepSeek 自带自动上下文缓存，无需手动 cache_control
   - 顺序处理，条目间 sleep 0.5s 避免 rate limit
-  - 降级策略：API key 缺失/tool_use 解析失败/API 异常，返回 summary_zh=原文前150字，其余字段为空/默认值
-  - 结构化输出：使用 tool_use + tool_choice={"type":"tool","name":"save_digest"} 强制输出，response.content 中找 type=="tool_use" 的 block，直接读 .input（已是 dict），无需任何 JSON 解析，从根本上消除 unescaped 引号导致的解析失败
-  - prompt 面向 AI 产品经理视角，8 个字段通过 tool input_schema 强制类型+必填（见 DigestedItem）
+  - 降级策略：API key 缺失/function call 缺失/JSON 解析失败/API 异常，返回 summary_zh=原文前150字，其余字段为空/默认值
+  - 结构化输出：使用 OpenAI function calling + tool_choice={"type":"function","function":{"name":"save_digest"}} 强制调用，从 response.choices[0].message.tool_calls[0].function.arguments 取出；注意 OpenAI 风格 arguments 是 JSON 字符串，需 json.loads（不同于 Anthropic 直接给 dict），解析失败统一走 fallback
+  - prompt 面向 AI builder（产品+算法）视角，字段通过 function parameters 强制类型+必填（见 DigestedItem）
+  - 独有分析维度（仅中文，无英文）：org_efficiency（组织效率优化参考价值）、data_annotation（数据标注参考价值，锚点示例=音频+3段ASR候选转录让模型判别真实转录）
 - filter.py 设计决策（Module 2）：
   - URL 去重只剥离 utm_* 参数，fragment 保留
   - score 阈值：hn>=50，github>=20，x>=30，其余 source 为 0
@@ -98,7 +99,9 @@ ai-news/
 | eli5 | str | 2-3句大白话，面向非技术人 |
 | use_cases | list | 具体应用场景，2-4条 |
 | tags | list | 关键词标签，2-4个 |
-| importance | int | 1-5分，AI产品经理视角打分 |
+| importance | int | 1-5分，AI builder（产品+算法）视角打分 |
 | title_zh | str | 中文标题（原文非中文时翻译，中文则原样） |
 | category | str | 分类：模型能力/AI产品/商业动态/开源生态/行业落地/其他 |
-| so_what | str | 100-150字影响分析，AI产品经理视角 |
+| so_what | str | 100-150字影响分析，AI builder（产品+算法）视角 |
+| org_efficiency | str | 80-120字，对组织效率优化的参考价值（仅中文） |
+| data_annotation | str | 80-120字，对数据标注（音频/代码等）的参考价值（仅中文） |
