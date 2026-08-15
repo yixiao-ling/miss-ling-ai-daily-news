@@ -1,7 +1,7 @@
 # Miss Ling AI 日报
 
 ## 项目简介
-一款面向 **AI builder（产品 + 算法）**的每日资讯聚合工具。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集内容，经本地关键词过滤、去重、DeepSeek AI 摘要处理，生成每日精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
+一款面向 **AI builder（产品 + 算法）**的资讯聚合工具，每 3 天更新一次。自动从 Hacker News、Product Hunt、GitHub Trending、X KOL 推文 JSON、36kr/虎嗅/AIbase RSS 中采集过去 3 天内的内容，经本地关键词过滤、去重、DeepSeek AI 摘要处理，生成热度精华 HTML 简报，部署在 GitHub Pages 上，用浏览器直接访问。
 
 目标受众特征：既懂模型/算法原理与工程实现，也关注产品落地、商业价值、需要快速判断信息优先级。
 
@@ -10,7 +10,7 @@
 - 采集：requests, feedparser, PRAW（Reddit 已移除，保留接口以备扩展）
 - AI 摘要：openai SDK（DeepSeek，OpenAI 兼容接口，模型 deepseek-chat）
 - 模板渲染：Jinja2
-- 自动化：GitHub Actions（cron 每日 UTC 01:00 触发）
+- 自动化：GitHub Actions（cron 每日 UTC 01:00 触发检查，脚本内判断距上次发布是否满 3 天，未满则跳过，实现滚动 3 天节奏）
 - 部署：GitHub Pages（docs/ 目录）
 
 ## 目录结构
@@ -62,6 +62,11 @@ ai-news/
 - Product Hunt 使用官方 Atom feed，无需 API Key
 - HN 使用 Algolia Search API，免费无需 Key
 - DeepSeek API 调用失败时降级展示原标题+截断摘要，不阻塞页面生成
+- 3 天节奏设计决策（2026-08-15，Yixiao 确认）：
+  - GitHub Actions cron 的 */3 写法按日历日取模，月末会断档（如 28→31→1 间隔变 1 天），故不采用；改为 cron 仍每日 UTC 01:00 触发，workflow 内新增 "Check 3-day schedule" 步骤，读取 docs/archive/*.html 最新日期，距今不满 3 天则跳过后续所有步骤（含 Claude 调用），实现真正的滚动 3 天节奏
+  - 各来源时间窗口统一为 since_hours=74（3 天 + 2 小时缓冲）：fetch_hackernews 用 Algolia created_at_i 过滤；fetch_producthunt / fetch_rss_sources 新增基于 feedparser 的 published_parsed/updated_parsed（UTC struct_time，用 calendar.timegm 转时间戳）过滤，无法解析时间的条目不丢弃（保留）
+  - GitHub Trending 页面本身不支持自定义天数，since=daily 改为 since=weekly（覆盖 7 天，比 3 天窗口宽，但页面按 stars 排序，热度最高的会排在前面，可接受地略微牺牲精确度换取不漏掉 3 天窗口内的项目）
+  - truncate 的分源轮询选取逻辑保持不变（未改为全局按分数排序），避免 PH/RSS（score 恒为 0）被 GH/X 完全挤出
 - summarize.py 设计决策（Module 3）：
   - 服务商：DeepSeek（OpenAI 兼容接口），openai SDK，base_url=https://api.deepseek.com，模型 deepseek-chat
   - DeepSeek 自带自动上下文缓存，无需手动 cache_control

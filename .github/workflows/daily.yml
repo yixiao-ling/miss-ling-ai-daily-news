@@ -1,8 +1,8 @@
-name: Daily Digest
+name: 3-Day Digest
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # UTC 01:00 = 北京 09:00
+    - cron: '0 1 * * *'  # UTC 01:00 触发检查；脚本内判断是否满3天再决定是否真正执行
   workflow_dispatch:
 
 permissions:
@@ -15,23 +15,46 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Check 3-day schedule
+        id: check
+        run: |
+          LATEST=$(ls docs/archive/*.html 2>/dev/null | grep -Eo '[0-9]{4}-[0-9]{2}-[0-9]{2}' | sort | tail -1)
+          if [ -z "$LATEST" ]; then
+            echo "No previous archive found, running now."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          LATEST_EPOCH=$(date -u -d "$LATEST" +%s)
+          TODAY_EPOCH=$(date -u +%s)
+          DIFF_DAYS=$(( (TODAY_EPOCH - LATEST_EPOCH) / 86400 ))
+          echo "Latest digest: $LATEST ($DIFF_DAYS day(s) ago)"
+          if [ "$DIFF_DAYS" -lt 3 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Python
+        if: steps.check.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
+        if: steps.check.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: Run pipeline
+        if: steps.check.outputs.skip != 'true'
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: python -m src.main
 
       - name: Commit & push if changed
+        if: steps.check.outputs.skip != 'true'
         run: |
           git config user.name "Miss Ling Bot"
           git config user.email "bot@miss-ling-ai-daily"
           git add docs/
-          git diff --staged --quiet || git commit -m "chore: daily digest $(date +'%Y-%m-%d')"
+          git diff --staged --quiet || git commit -m "chore: digest $(date +'%Y-%m-%d')"
           git push

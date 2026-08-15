@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import calendar
 import re
 import time
 from datetime import datetime, timezone
@@ -56,8 +57,8 @@ def _matches(text: str, keywords) -> bool:
 # Hacker News (Algolia Search API)
 # ---------------------------------------------------------------------------
 
-def fetch_hackernews(since_hours: int = 26) -> list[RawItem]:
-    """Top AI-related HN stories from the last `since_hours`, points > 50.
+def fetch_hackernews(since_hours: int = 74) -> list[RawItem]:
+    """Top AI-related HN stories from the last `since_hours` (3 days + 2h buffer), points > 50.
 
     Algolia's `query` is space-separated and ranked by relevance; we use a
     broad `"AI"` query and apply a stricter client-side keyword check
@@ -107,8 +108,9 @@ def fetch_hackernews(since_hours: int = 26) -> list[RawItem]:
 # Product Hunt (Atom feed)
 # ---------------------------------------------------------------------------
 
-def fetch_producthunt() -> list[RawItem]:
-    """Latest PH launches filtered by AI / dev-tool keywords."""
+def fetch_producthunt(since_hours: int = 74) -> list[RawItem]:
+    """PH launches from the last `since_hours` (3 days + 2h buffer), filtered by AI / dev-tool keywords."""
+    cutoff = time.time() - since_hours * 3600
     feed = feedparser.parse(
         "https://www.producthunt.com/feed",
         request_headers={"User-Agent": _USER_AGENT},
@@ -121,6 +123,10 @@ def fetch_producthunt() -> list[RawItem]:
         if not title or not url:
             continue
         if not _matches(title + " " + summary, _KW_DEV):
+            continue
+
+        parsed = e.get("published_parsed") or e.get("updated_parsed")
+        if parsed and calendar.timegm(parsed) < cutoff:
             continue
 
         # Atom feeds use `published` or `updated`; both already ISO-8601 in PH
@@ -184,9 +190,9 @@ def fetch_x_kol(json_path: str = "data/x_kol.json") -> list[RawItem]:
 # ---------------------------------------------------------------------------
 
 _GH_TRENDING_PAGES = (
-    "https://github.com/trending/python?since=daily",
-    "https://github.com/trending/javascript?since=daily",
-    "https://github.com/trending?since=daily",
+    "https://github.com/trending/python?since=weekly",
+    "https://github.com/trending/javascript?since=weekly",
+    "https://github.com/trending?since=weekly",
 )
 
 
@@ -259,8 +265,9 @@ _RSS_SOURCES = [
 ]
 
 
-def fetch_rss_sources() -> list[RawItem]:
-    """Fetch 36kr, 虎嗅, AIbase RSS feeds; keyword-filter; max 10/source."""
+def fetch_rss_sources(since_hours: int = 74) -> list[RawItem]:
+    """Fetch 36kr, 虎嗅, AIbase RSS feeds from the last `since_hours` (3 days + 2h buffer); keyword-filter; max 10/source."""
+    cutoff = time.time() - since_hours * 3600
     items: list[RawItem] = []
     for source, label, url in _RSS_SOURCES:
         try:
@@ -276,6 +283,9 @@ def fetch_rss_sources() -> list[RawItem]:
                 if not title or not link:
                     continue
                 if not _matches(title + " " + summary, _KW_CN):
+                    continue
+                parsed = e.get("published_parsed") or e.get("updated_parsed")
+                if parsed and calendar.timegm(parsed) < cutoff:
                     continue
                 published = (
                     e.get("published")
